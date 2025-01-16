@@ -55,11 +55,11 @@
      {
       "group": "Platform",
       "pages": [
-        "Analytics",
-        "Knowledge base",
-        "Livechat",
-        "Team",
-        "Settings"
+        "analytics",
+        "knowledge base",
+        "livechat",
+        "team",
+        "settings"
         
       ]
     {
