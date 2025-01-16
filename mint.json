@@ -53,23 +53,15 @@
       ]
     },
      {
-      "group": "Analytics",
+      "group": "Platform",
       "pages": [
-        "analytics"
+        "Analytics",
+        "Knowledge base",
+        "Livechat",
+        "Team",
+        "Settings"
+        
       ]
-    },
-    {
-      "group": "Knowledge base",
-      "pages": [
-        "introduction to knowledge base"
-      ]
-    },
-    {
-      "group": "Livechat",
-      "pages": [
-        "introduction to livechat"
-      ]
-    },
     {
       "group": "Essentials",
       "pages": [
