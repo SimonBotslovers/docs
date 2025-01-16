@@ -59,10 +59,10 @@
         "knowledge base",
         "livechat",
         "team",
-        "settings"
-        
-      ],
-    {
+        "settings"  
+      ]
+       },
+        {
       "group": "Essentials",
       "pages": [
         "essentials/markdown",
