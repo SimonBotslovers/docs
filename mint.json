@@ -53,6 +53,12 @@
         "analytics"
       ]
     },
+     {
+      "group": "Analytics",
+      "pages": [
+        "introduction"
+      ]
+    },
     {
       "group": "Essentials",
       "pages": [
