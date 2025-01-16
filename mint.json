@@ -49,12 +49,23 @@
       "pages": [
         "introduction",
         "quickstart",
-        "development",
-        "analytics"
+        "development"
       ]
     },
      {
       "group": "Analytics",
+      "pages": [
+        "introduction"
+      ]
+    },
+    {
+      "group": "Knowledge base",
+      "pages": [
+        "introduction"
+      ]
+    },
+    {
+      "group": "Livechat",
       "pages": [
         "introduction"
       ]
