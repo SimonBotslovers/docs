@@ -1,5 +1,33 @@
----
-title: 'Livechat'
-description: 'Description of your new file.'
----
+## Automatic Assignment
 
+The **Livechat** is a dedicated space for agents to manually handle conversations that have been automated. It features a lightweight and agile interface, designed this way because the majority of conversations will be managed by generative AI.
+
+There are two operating modes, configurable from the Live Chat preferences in the settings:
+
+1\. **Automatic Assignment**: As conversations are routed to agents, they are automatically assigned to those who meet the configured requirements (e.g., being online, not exceeding their chat capacity, and handling inquiries in English). These agent-specific criteria are defined during onboarding. Conversations that cannot be assigned due to agent unavailability are placed in a queue and assigned to an agent as soon as one becomes available or a new agent logs in. The process is entirely automated.
+
+2\. **No Automatic Assignment**: Conversations routed to agents remain in an “unassigned” state. Agents can access the queue and manually assign chats to themselves as needed.
+
+## Agent Status
+
+At the top of the Livechat interface, agents can update their status, which will determine how chats are assigned to them and how they respond to them. This status are:
+
+• **Active** - Available to receive tickets.
+
+• **Break** - Unavailable to receive tickets. Break time should be tracked.
+
+• **Training** - Unavailable to receive tickets but can navigate through the interface.
+
+• **Ending Shift** - Available but nearing the end of the shift. Cannot receive new tickets but has time to close any open cases (track time).
+
+• **Offline** - Unavailable.
+
+![](/chatstatus.png)
+
+## Livechat folders
+
+Currently, there are three main folders (**Assigned to me**, **Unassigned**, **Automated**) based on the current state of the chat. Additionally, users with administrative access can view a fourth folder, **All requests**, allowing them to review all conversations assigned to different agents.
+
+<Note>
+  Remember, if automatic assignment is enabled, you don’t need to worry about the **Unassigned** folder, as these conversations will be automatically assigned.
+</Note>
