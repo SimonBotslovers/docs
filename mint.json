@@ -43,11 +43,15 @@
       "group": "Platform",
       "pages": [
         "ug_analytics_en",
-        "ug_knowledge_en",
         "ug_livechat_en",
         "ug_team_en",
-        "ug_new_en",
         "ug_settings_en"  
+      ]
+       },
+    {
+      "group": "Other",
+      "pages": [
+        "ug_knowledge_en",
       ]
        },
     {
