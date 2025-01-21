@@ -36,7 +36,6 @@
       "group": "Get Started",
       "pages": [
         "ug_introduction_en",
-        "ug_understandai_en",
         "ug_whylovi_en"
       ]
     },
@@ -44,7 +43,7 @@
       "group": "Platform",
       "pages": [
         "ug_analytics_en",
-        "ug_kb_en",
+        "ug_knowledge_en",
         "ug_livechat_en",
         "ug_team_en",
         "ug_settings_en"  
@@ -66,5 +65,8 @@
     }
   ],
   "footerSocials": {
-    "linkedin": "https://linkedin.com/company/botslovers"
+    "x": "https://x.com/mintlify",
+    "github": "https://github.com/mintlify",
+    "linkedin": "https://linkedin.com/company/mintlify"
   }
+}
