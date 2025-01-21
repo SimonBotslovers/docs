@@ -27,37 +27,11 @@ Lovi’s Reasoning Engine further enhances the AI Agent’s capabilities by cons
 
 Based on this analysis, the AI Agent determines the appropriate course of action, such as asking follow-up questions, providing information from the knowledge base, or executing configured actions to assist the customer effectively.
 
-# My Mermaid Diagram.
-
-Here is a simple diagram created using Mermaid:
-
-```mermaid
-graph TD
-    A[Import content from knowledge base into the AI Agent] --> B[Divide the content into manageable chunks]
-    B --> C[Analyze each chunk's meaning using the LLM]
-    C --> D[Store numerical representations of chunks in a database for retrieval]
-    
-    style A fill:#4CAF50,stroke:#333,color:#FFFFFF
-    style B fill:#2196F3,stroke:#333,color:#FFFFFF
-    style C fill:#9C27B0,stroke:#333,color:#FFFFFF
-    style D fill:#FF9800,stroke:#333,color:#FFFFFF
-    
-    subgraph Bot Process
-        A
-        B
-        D
-    end
-    
-    subgraph LLM Analysis
-        C
-    end
-  
-
 ## Understand how your AI Agent generates content from your knowledge base
 
 When you connect your knowledge base to Lovi’s AI Agent, it ingests your content to efficiently provide relevant information to customer inquiries. Here’s an overview of the process:
 
-### Ingesting Your Knowledge Base
+### [​](https://lovi.mintlify.app/ug_understandai_en#ingesting-your-knowledge-base)&#xA;Ingesting Your Knowledge Base
 
 1\. Content Import: Lovi’s AI Agent imports all the content from your knowledge bases and checks for any content updates every 24 hours.
 
@@ -65,7 +39,7 @@ When you connect your knowledge base to Lovi’s AI Agent, it ingests your conte
 
 3\. Embedding Creation: Each chunk is processed by a Large Language Model (LLM) to generate numerical representations, known as embeddings, which capture the meaning of the content. These embeddings are stored in a database for quick retrieval.
 
-### Generating Responses
+### [​](https://lovi.mintlify.app/ug_understandai_en#generating-responses)&#xA;Generating Responses
 
 1\. Query Processing: When a customer submits a query, Lovi’s AI Agent converts it into an embedding using the LLM. It then performs a moderation check to filter out inappropriate or toxic content.
 
@@ -76,4 +50,3 @@ When you connect your knowledge base to Lovi’s AI Agent, it ingests your conte
 4\. Response Generation: The selected content chunks are sent to GPT to construct a natural-sounding response. This response undergoes three filters to ensure it is safe, relevant, and accurate before being delivered to the customer.
 
 By following this process, Lovi’s AI Agent effectively utilizes your knowledge base to provide accurate and contextually appropriate responses to customer inquiries.
-```
