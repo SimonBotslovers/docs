@@ -4,7 +4,6 @@ title: "How your AI Agent works"
 
 ## Understand how your AI Agent works
 
-
 Lovi’s AI Agent leverages Large Language Models (LLMs) to interpret customer inquiries by analyzing extensive text data, enabling it to discern the intent behind questions.
 
 Utilizing generative AI, the agent formulates responses by assembling information from your knowledge base into natural, conversational replies.
@@ -29,7 +28,6 @@ Based on this analysis, the AI Agent determines the appropriate course of action
 
 ## How your AI Agent generates content from your knowledge base
 
-
 When you connect your knowledge base to Lovi’s AI Agent, it ingests your content to efficiently provide relevant information to customer inquiries. Here’s an overview of the process:
 
 ### Ingesting Your Knowledge Base
@@ -51,3 +49,22 @@ When you connect your knowledge base to Lovi’s AI Agent, it ingests your conte
 4. Response Generation: The selected content chunks are sent to GPT to construct a natural-sounding response. This response undergoes three filters to ensure it is safe, relevant, and accurate before being delivered to the customer.
 
 By following this process, Lovi’s AI Agent effectively utilizes your knowledge base to provide accurate and contextually appropriate responses to customer inquiries.
+
+```mermaid
+  flowchart LR
+    subgraph subgraph1
+        direction TB
+        top1[top] --> bottom1[bottom]
+    end
+    subgraph subgraph2
+        direction TB
+        top2[top] --> bottom2[bottom]
+    end
+    %% ^ These subgraphs are identical, except for the links to them:
+
+    %% Link *to* subgraph1: subgraph1 direction is maintained
+    outside --> subgraph1
+    %% Link *within* subgraph2:
+    %% subgraph2 inherits the direction of the top-level graph (LR)
+    outside ---> top2
+```
