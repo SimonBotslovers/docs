@@ -38,18 +38,6 @@ When you connect your knowledge base to Lovi’s AI Agent, it ingests your conte
 
 3. Embedding Creation: Each chunk is processed by a Large Language Model (LLM) to generate numerical representations, known as embeddings, which capture the meaning of the content. These embeddings are stored in a database for quick retrieval.
 
-### Generating Responses
-
-1. Query Processing: When a customer submits a query, Lovi’s AI Agent converts it into an embedding using the LLM. It then performs a moderation check to filter out inappropriate or toxic content.
-
-2. Semantic Retrieval: The AI Agent compares the query’s embedding with those in its database to identify the most semantically similar content chunks. It selects the top three relevant chunks to formulate a response.
-
-3. Contextual Understanding: For follow-up questions, the AI Agent may rephrase the query to incorporate previous conversation context, enhancing the relevance of the retrieved information.
-
-4. Response Generation: The selected content chunks are sent to GPT to construct a natural-sounding response. This response undergoes three filters to ensure it is safe, relevant, and accurate before being delivered to the customer.
-
-By following this process, Lovi’s AI Agent effectively utilizes your knowledge base to provide accurate and contextually appropriate responses to customer inquiries.
-
 ```mermaid
   flowchart LR
     subgraph subgraph1
@@ -68,3 +56,15 @@ By following this process, Lovi’s AI Agent effectively utilizes your knowledge
     %% subgraph2 inherits the direction of the top-level graph (LR)
     outside ---> top2
 ```
+
+### Generating Responses
+
+1. Query Processing: When a customer submits a query, Lovi’s AI Agent converts it into an embedding using the LLM. It then performs a moderation check to filter out inappropriate or toxic content.
+
+2. Semantic Retrieval: The AI Agent compares the query’s embedding with those in its database to identify the most semantically similar content chunks. It selects the top three relevant chunks to formulate a response.
+
+3. Contextual Understanding: For follow-up questions, the AI Agent may rephrase the query to incorporate previous conversation context, enhancing the relevance of the retrieved information.
+
+4. Response Generation: The selected content chunks are sent to GPT to construct a natural-sounding response. This response undergoes three filters to ensure it is safe, relevant, and accurate before being delivered to the customer.
+
+By following this process, Lovi’s AI Agent effectively utilizes your knowledge base to provide accurate and contextually appropriate responses to customer inquiries.
