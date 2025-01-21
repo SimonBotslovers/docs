@@ -27,7 +27,31 @@ Lovi’s Reasoning Engine further enhances the AI Agent’s capabilities by cons
 
 Based on this analysis, the AI Agent determines the appropriate course of action, such as asking follow-up questions, providing information from the knowledge base, or executing configured actions to assist the customer effectively.
 
-/
+# My Mermaid Diagram
+
+Here is a simple diagram created using Mermaid:
+
+```mermaid
+graph TD
+    A[Import content from knowledge base into the AI Agent] --> B[Divide the content into manageable chunks]
+    B --> C[Analyze each chunk's meaning using the LLM]
+    C --> D[Store numerical representations of chunks in a database for retrieval]
+    
+    style A fill:#4CAF50,stroke:#333,color:#FFFFFF
+    style B fill:#2196F3,stroke:#333,color:#FFFFFF
+    style C fill:#9C27B0,stroke:#333,color:#FFFFFF
+    style D fill:#FF9800,stroke:#333,color:#FFFFFF
+    
+    subgraph Bot Process
+        A
+        B
+        D
+    end
+    
+    subgraph LLM Analysis
+        C
+    end
+  
 
 ## Understand how your AI Agent generates content from your knowledge base
 
@@ -52,3 +76,4 @@ When you connect your knowledge base to Lovi’s AI Agent, it ingests your conte
 4\. Response Generation: The selected content chunks are sent to GPT to construct a natural-sounding response. This response undergoes three filters to ensure it is safe, relevant, and accurate before being delivered to the customer.
 
 By following this process, Lovi’s AI Agent effectively utilizes your knowledge base to provide accurate and contextually appropriate responses to customer inquiries.
+```
