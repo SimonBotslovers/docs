@@ -17,8 +17,6 @@ To ensure response quality, the AI Agent employs content filters that verify eac
 
 • No match: Interprets that it is a specific question that does not exist in the knowledge base but should exist.
 
-
-
 Lovi’s Reasoning Engine further enhances the AI Agent’s capabilities by considering:
 
 • Conversation context: Previous interactions to provide coherent responses.
@@ -27,9 +25,32 @@ Lovi’s Reasoning Engine further enhances the AI Agent’s capabilities by cons
 
 • Business systems: Configured actions that allow the agent to retrieve the necessary information.
 
-
-
 Based on this analysis, the AI Agent determines the appropriate course of action, such as asking follow-up questions, providing information from the knowledge base, or executing configured actions to assist the customer effectively.
+
+````
+```mermaid
+graph TD
+    A[Import content from knowledge base into the bot] --> B[Divide the content into manageable chunks]
+    B --> C[Analyze each chunk's meaning using the LLM]
+    C --> D[Store numerical representations of chunks in a database for retrieval]
+    
+    style A fill:#4CAF50,stroke:#333,color:#FFFFFF
+    style B fill:#2196F3,stroke:#333,color:#FFFFFF
+    style C fill:#9C27B0,stroke:#333,color:#FFFFFF
+    style D fill:#FF9800,stroke:#333,color:#FFFFFF
+    
+    subgraph Bot Process
+        A
+        B
+        D
+    end
+    
+    subgraph LLM Analysis
+        C
+    end
+````
+
+
 
 ## Understand how your AI Agent generates content from your knowledge base
 
