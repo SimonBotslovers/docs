@@ -39,22 +39,25 @@ When you connect your knowledge base to Lovi’s AI Agent, it ingests your conte
 3. Embedding Creation: Each chunk is processed by a Large Language Model (LLM) to generate numerical representations, known as embeddings, which capture the meaning of the content. These embeddings are stored in a database for quick retrieval.
 
 ```mermaid
-  flowchart LR
-    subgraph subgraph1
-        direction TB
-        top1[top] --> bottom1[bottom]
+  graph TD
+    A[Import content from knowledge base into the AI Agent] --> B[Divide the content into manageable chunks]
+    B --> C[Analyze each chunk's meaning using the LLM]
+    C --> D[Store numerical representations of chunks in a database for retrieval]
+    
+    style A fill:#4CAF50,stroke:#333,color:#FFFFFF
+    style B fill:#2196F3,stroke:#333,color:#FFFFFF
+    style C fill:#9C27B0,stroke:#333,color:#FFFFFF
+    style D fill:#FF9800,stroke:#333,color:#FFFFFF
+    
+    subgraph Bot Process
+        A
+        B
+        D
     end
-    subgraph subgraph2
-        direction TB
-        top2[top] --> bottom2[bottom]
+    
+    subgraph LLM Analysis
+        C
     end
-    %% ^ These subgraphs are identical, except for the links to them:
-
-    %% Link *to* subgraph1: subgraph1 direction is maintained
-    outside --> subgraph1
-    %% Link *within* subgraph2:
-    %% subgraph2 inherits the direction of the top-level graph (LR)
-    outside ---> top2
 ```
 
 ### Generating Responses
