@@ -4,5 +4,23 @@ Here is a simple diagram created using Mermaid:
 
 ```mermaid
 graph TD
-    A[Start] --> B[Process]
-    B --> C[End]
+    A[Import content from knowledge base into the AI Agent] --> B[Divide the content into manageable chunks]
+    B --> C[Analyze each chunk's meaning using the LLM]
+    C --> D[Store numerical representations of chunks in a database for retrieval]
+    
+    style A fill:#4CAF50,stroke:#333,color:#FFFFFF
+    style B fill:#2196F3,stroke:#333,color:#FFFFFF
+    style C fill:#9C27B0,stroke:#333,color:#FFFFFF
+    style D fill:#FF9800,stroke:#333,color:#FFFFFF
+    
+    subgraph Bot Process
+        A
+        B
+        D
+    end
+    
+    subgraph LLM Analysis
+        C
+    end
+  
+```
