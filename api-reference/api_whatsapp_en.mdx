@@ -2,6 +2,7 @@
 title: "API WhatsApp Lovi"
 description: "⚙️ Official documentation for interacting with Lovi's API via Postman"
 ---
+
 ## Intro
 
 This manual describes in a practical way the methodology for connecting and accessing Lovi API services, allowing the sending of notifications via WhatsApp. Authentication is performed using tokens that enable basic authentication for the API services.
@@ -64,7 +65,6 @@ After obtaining your token, the next step is to retrieve the list of API keys fo
 
 ### Endpoint
 
-
 The request to retrieve the API keys is also a **POST** request:
 
 ```
@@ -72,7 +72,6 @@ POST https://cloud.lovi.ai/functions/v1/api_keys
 ```
 
 ### Headers
-
 
 You need to include the **access token** in the request headers like this:
 
@@ -97,13 +96,13 @@ The response will contain a list of API keys for the companies your user has acc
 
 > 📝 Each company will have a unique access key. You must use the correct key depending on which company you're interacting with.
 
+---
+
 ### 🔁 Token per Company
 
 Once you identify which company you want to work with, you must authenticate again to generate a **company-level token**. This is usually required for secured actions like sending notifications or uploading media.
 
 You will use the previously retrieved `access_key` in your query parameters or headers, depending on the endpoint.
-
----
 
 ---
 
@@ -163,3 +162,181 @@ In the body of the request, you’ll send the notification details, including pl
 * **notification_type**: The type of notification being sent, such as "marketing" in this case.
 
 * **campaign_name**: The name of the campaign to which the notification belongs.
+---
+
+## 🔊 Upload Audio
+
+To upload audio to the Lovi platform, you need to make a **POST** request to the following endpoint. The request should include the necessary form data with the session ID and the audio file.
+
+### Endpoint
+
+Use this POST request to upload the audio:
+
+```
+POST https://cloud.lovi.ai/functions/v1/voice/upload
+```
+
+### Form Data
+
+The form data should include the following fields:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| session_id | text | Unique session ID |
+| audio | file | Audio file to upload |
+
+---
+
+## 🧑‍💼 Invite/Reinvite User
+
+### Reinvite User
+
+To reinvite a user, use this **POST** request:
+
+```
+POST https://cloud.lovi.ai/functions/v1/users/reinvite
+```
+
+### Invite User
+
+To invite a new user, use this **POST** request:
+
+```
+POST https://d975-46-27-0-124.ngrok-free.app/functions/v1/users/invite
+```
+
+### Body
+
+The body of the request should include the user's email and the company name. Here's an example with anonymized information:
+
+```json
+{
+  "email": "user@example.com",
+  "name_companie": "ExampleCompany"
+}
+```
+---
+
+## 🏢 Create New Company
+
+To create a new company, send a POST request to the specified endpoint. The request should include the necessary authorization headers and the body with the company details.
+
+### Endpoint
+
+To create a new company, use the following **POST** request:
+
+```
+POST https://cloud.lovi.ai/functions/v1/newcustomer
+```
+
+### Headers
+
+Include the authorization header with your personal access token:
+
+```json
+{
+  "Authorization": "Bearer your-personal-access-token"
+}
+```
+
+### Body
+
+The body of the request should include the company name and the email address. Here's an example:
+
+```json
+{
+  "companie": "ExampleCompany",
+  "email": "user@example.com"
+}
+```
+
+---
+
+## 📥 Upload WhatsApp Template
+
+To upload a WhatsApp template, send a POST request to the specified endpoint. The request should include the necessary body content that defines the template, buttons, and other relevant details.
+
+### Endpoint
+
+Use this POST request to upload the WhatsApp template
+
+```
+POST https://vditxnjbejitzkcfqzzv.supabase.co/functions/v1/admin/whatsapp/create/template
+```
+
+### Body
+
+The body of the request should include the template details, such as the company ID, WhatsApp business account (WABA) ID, template name, language, and the buttons to be included in the template. Here's an example:
+
+```json
+{
+  "company_id": "e17f3b7d-28ef-4d34-896d-ca5e11e5361c",
+  "waba_id": "511841218687554",
+  "name_template": "andy botoness",
+  "language_template": "en_US",
+  "category_template": "MARKETING",
+  "components_template": {
+    "BODY": {
+      "text": "This is a test message to show the buttons that can be created in a WhatsApp message."
+    },
+    "BUTTONS": [
+      {
+        "type": "QUICK_REPLY",
+        "text": "Chat with an agent"
+      },
+      {
+        "type": "QUICK_REPLY",
+        "text": "What do you do?"
+      },
+      {
+        "type": "QUICK_REPLY",
+        "text": "I want to buy"
+      },
+      {
+        "type": "QUICK_REPLY",
+        "text": "I want to sell"
+      },
+      {
+        "type": "URL",
+        "url": "https://www.example.com",
+        "text": "Visit Website"
+      },
+      {
+        "type": "URL",
+        "url": "https://www.example2.com",
+        "text": "See what we do"
+      }
+    ]
+  }
+}
+```
+
+---
+
+## 📚 Tips for Development
+
+Here are some helpful tips for working with the Lovi API:
+
+- Use `access_key` when available in query parameters.
+- Use `apikey` or `Authorization: Bearer` in headers depending on endpoint security.
+- For endpoints that deal with voice or widgets, `session_id` is crucial.
+- Store and handle tokens securely.
+
+---
+
+## ✅ Status and Monitoring
+
+For checking the status and monitoring the system, you can use the following endpoints:
+
+- `GET /functions/v1/web/status_chat` → Check chat status
+- `GET /functions/v1/widget` → Get web widget configuration
+
+---
+
+> ✍️ This documentation is auto-generated based on Postman collection for Botslovers & LOVI ecosystem. For any questions, contact your API administrator.
+
+---
+
+## 📎 Resources
+
+- [Postman Collection Viewer](https://orange-crescent-213922.postman.co/workspace/Botslovers-Intregrations~a73d6175-7625-4e61-829a-93a8a9b8d923/collection/11282424-6847fe38-8dff-4610-8219-f7c374516030)
