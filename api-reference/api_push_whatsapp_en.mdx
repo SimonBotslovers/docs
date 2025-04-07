@@ -1,134 +1,74 @@
----
-title: "API WhatsApp Lovi"
-description: "Official documentation for interacting with Lovi's API via Postman"
----
+<h2>Intro</h2>
+<p>This manual describes in a practical way the methodology for connecting and accessing Lovi API services, allowing the sending of notifications via WhatsApp. Authentication is performed using tokens that enable basic authentication for the API services.</p>
 
-## Intro
+<h2>🔑 Authentication</h2>
+<p>To access any Lovi API endpoint, you first need to authenticate by sending a POST request to the authentication endpoint with your email and password. In response, you'll receive a personal access token.</p>
+<p><strong>Token Rotation</strong>: We recommend periodically rotating tokens and storing them securely.</p>
 
-This manual describes in a practical way the methodology for connecting and accessing Lovi API services, allowing the sending of notifications via WhatsApp. Authentication is performed using tokens that enable basic authentication for the API services.
+<h3>Authentication Endpoint</h3>
+<pre><code>POST https://cloud.lovi.ai/auth/v1/token?grant_type=password</code></pre>
 
-## 🔑 Authentication
-
-To access any Lovi API endpoint, you first need to authenticate by sending a POST request to the authentication endpoint with your email and password. In response, you'll receive a personal access token.
-
-**Token Rotation**: We recommend periodically rotating tokens and storing them securely.
-
-### Authentication Endpoint
-
-To obtain your access token, send a **POST** request to the following URL:
-
-```
-POST https://cloud.lovi.ai/auth/v1/token?grant_type=password
-```
-### Headers
-
-You need to include the following header in your request to indicate that the content you're sending is in JSON format:
-
-```json
-{
+<h3>Headers</h3>
+<pre><code>{
   "Content-Type": "application/json"
-}
-```
-### Body
+}</code></pre>
 
-In the body of your request, securely send your email and password in JSON format:
-
-```json
-{
+<h3>Body</h3>
+<pre><code>{
   "email": "your-email@example.com",
   "password": "your-secure-password"
-}
-```
-### Response
+}</code></pre>
 
-If the request is successful, you'll receive a response containing your access token. You'll use this token to interact with the other API endpoints.
-
-```json
-{
+<h3>Response</h3>
+<pre><code>{
   "access_token": "your-personal-access-token",
   "token_type": "bearer",
   "expires_in": 3600
-}
+}</code></pre>
 
-```
+<blockquote>📌 Important: Save this token — you'll use it to interact with the rest of the API.</blockquote>
 
-> 📌 Important: Save this token — you'll use it to interact with the rest of the API.
+<hr />
 
----
+<h2>🧭 Retrieve Company API Keys</h2>
+<h3>Endpoint</h3>
+<pre><code>POST https://cloud.lovi.ai/functions/v1/api_keys</code></pre>
 
-## 🧭 Retrieve Company API Keys
-
-After obtaining your token, the next step is to retrieve the list of API keys for the companies your user has access to.
-
-### Endpoint
-
-The request to retrieve the API keys is also a **POST** request:
-
-```
-POST https://cloud.lovi.ai/functions/v1/api_keys
-```
-
-### Headers
-
-You need to include the **access token** in the request headers like this:
-
-```json
-{
+<h3>Headers</h3>
+<pre><code>{
   "Authorization": "Bearer your-personal-access-token"
-}
-```
+}</code></pre>
 
-### Response
-
-The response will contain a list of API keys for the companies your user has access to, along with their respective company IDs:
-
-```json
-[
+<h3>Response</h3>
+<pre><code>[
   {
     "company_id": "example-company-id",
     "access_key": "example-access-key"
   }
-]
-```
+]</code></pre>
 
-> 📝 Each company will have a unique access key. You must use the correct key depending on which company you're interacting with.
+<blockquote>📝 Each company will have a unique access key. You must use the correct key depending on which company you're interacting with.</blockquote>
 
----
+<hr />
 
-### 🔁 Token per Company
+<h2>🔁 Token per Company</h2>
+<p>Once you identify which company you want to work with, you must authenticate again to generate a <strong>company-level token</strong>. This is usually required for secured actions like sending notifications or uploading media.</p>
+<p>You will use the previously retrieved <code>access_key</code> in your query parameters or headers, depending on the endpoint.</p>
 
-Once you identify which company you want to work with, you must authenticate again to generate a **company-level token**. This is usually required for secured actions like sending notifications or uploading media.
+<hr />
 
-You will use the previously retrieved `access_key` in your query parameters or headers, depending on the endpoint.
+<h2>📣 Send Notification</h2>
 
----
+<h3>Endpoint</h3>
+<pre><code>POST https://cloud.lovi.ai/functions/v1/notify?access_key=your-access-key&unflatten=true</code></pre>
 
-## 📣 Send Notification
-
-To send a notification using the Lovi API, you need to make a POST request to the appropriate endpoint with the necessary headers and body content. The notification request will include information such as the recipient's details, the content of the notification, and the campaign associated with it. Below is a detailed explanation of how to structure the request.
-
-### Endpoint
-
-To send a notification, you'll need to send a POST request to the following endpoint. The `access_key` and `unflatten`parameters are included in the URL:
-
-```
-POST https://cloud.lovi.ai/functions/v1/notify?access_key=your-access-key&unflatten=true
-```
-### Headers
-
-You’ll need to include the API key in the request headers for authorization:
-
-```json
-{
+<h3>Headers</h3>
+<pre><code>{
   "apikey": "your-api-key"
-}
-```
-### Body
+}</code></pre>
 
-In the body of the request, you’ll send the notification details, including placeholders for dynamic data (such as {{name}}). Here's an example:
-
-```json
-{
+<h3>Body</h3>
+<pre><code>{
   "components_push.body_text_0": "{{name}}",
   "components_push.body_text_1": "Technical in Nursing Care Assistance",
   "contact.number": "34666033135",
@@ -138,127 +78,80 @@ In the body of the request, you’ll send the notification details, including pl
   "recipient_id": "1234",
   "notification_type": "marketing",
   "campaign_name": "Example Campaign"
-}
-```
-* **components_push.body_text_0**: This is where the recipient’s name or other dynamic data will be inserted.
+}</code></pre>
 
-* **components_push.body_text_1**: A predefined text that will be included in the notification.
+<ul>
+  <li><strong>components_push.body_text_0</strong>: Where the recipient’s name or other dynamic data will be inserted.</li>
+  <li><strong>components_push.body_text_1</strong>: Predefined text included in the notification.</li>
+  <li><strong>contact.number</strong>: The recipient's phone number.</li>
+  <li><strong>contact.name</strong>: The recipient's name.</li>
+  <li><strong>language_template</strong>: e.g., <code>es_ES</code> for Spanish.</li>
+  <li><strong>name_template</strong>: Name of the approved WhatsApp template.</li>
+  <li><strong>recipient_id</strong>: Unique identifier for the recipient.</li>
+  <li><strong>notification_type</strong>: Like "marketing".</li>
+  <li><strong>campaign_name</strong>: Name of the campaign.</li>
+</ul>
 
-* **contact.number**: The recipient's phone number.
+<hr />
 
-* **contact.name**: The recipient's name.
+<h2>🔊 Upload Audio</h2>
+<p>POST to:</p>
+<pre><code>https://cloud.lovi.ai/functions/v1/voice/upload</code></pre>
 
-* **language_template**: Specifies the language of the template. For Spanish, you would set the language_template to `es_ES`.
+<h3>Form Data</h3>
+<table>
+  <thead>
+    <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>session_id</td><td>text</td><td>Unique session ID</td></tr>
+    <tr><td>audio</td><td>file</td><td>Audio file to upload</td></tr>
+  </tbody>
+</table>
 
-* **name_template**: Contains the name of the approved template for WhatsApp.
+<hr />
 
-* **recipient_id**: A unique identifier for the recipient.
+<h2>🧑‍💼 Invite/Reinvite User</h2>
 
-* **notification_type**: The type of notification being sent, such as "marketing" in this case.
+<h3>Reinvite</h3>
+<pre><code>POST https://cloud.lovi.ai/functions/v1/users/reinvite</code></pre>
 
-* **campaign_name**: The name of the campaign to which the notification belongs.
----
+<h3>Invite</h3>
+<pre><code>POST https://d975-46-27-0-124.ngrok-free.app/functions/v1/users/invite</code></pre>
 
-## 🔊 Upload Audio
-
-To upload audio to the Lovi platform, you need to make a **POST** request to the following endpoint. The request should include the necessary form data with the session ID and the audio file.
-
-### Endpoint
-
-Use this POST request to upload the audio:
-
-```
-POST https://cloud.lovi.ai/functions/v1/voice/upload
-```
-### Form Data
-
-The form data should include the following fields:
-
-| Field | Type | Description |
-| --- | --- | --- |
-| session_id | text | Unique session ID |
-| audio | file | Audio file to upload |
-
----
-
-## 🧑‍💼 Invite/Reinvite User
-
-### Reinvite User
-
-To reinvite a user, use this **POST** request:
-
-```
-POST https://cloud.lovi.ai/functions/v1/users/reinvite
-```
-### Invite User
-
-To invite a new user, use this **POST** request:
-
-```
-POST https://d975-46-27-0-124.ngrok-free.app/functions/v1/users/invite
-```
-### Body
-
-The body of the request should include the user's email and the company name. Here's an example with anonymized information:
-
-```json
-{
+<h3>Body</h3>
+<pre><code>{
   "email": "user@example.com",
   "name_companie": "ExampleCompany"
-}
-```
----
+}</code></pre>
 
-## 🏢 Create New Company
+<hr />
 
-To create a new company, send a POST request to the specified endpoint. The request should include the necessary authorization headers and the body with the company details.
+<h2>🏢 Create New Company</h2>
 
-### Endpoint
+<h3>Endpoint</h3>
+<pre><code>POST https://cloud.lovi.ai/functions/v1/newcustomer</code></pre>
 
-To create a new company, use the following **POST** request:
-
-```
-POST https://cloud.lovi.ai/functions/v1/newcustomer
-```
-
-### Headers
-
-Include the authorization header with your personal access token:
-
-```json
-{
+<h3>Headers</h3>
+<pre><code>{
   "Authorization": "Bearer your-personal-access-token"
-}
-```
-### Body
+}</code></pre>
 
-The body of the request should include the company name and the email address. Here's an example:
-
-```json
-{
+<h3>Body</h3>
+<pre><code>{
   "companie": "ExampleCompany",
   "email": "user@example.com"
-}
-```
----
+}</code></pre>
 
-## 📥 Upload WhatsApp Template
+<hr />
 
-To upload a WhatsApp template, send a POST request to the specified endpoint. The request should include the necessary body content that defines the template, buttons, and other relevant details.
+<h2>📥 Upload WhatsApp Template</h2>
 
-### Endpoint
+<h3>Endpoint</h3>
+<pre><code>POST https://vditxnjbejitzkcfqzzv.supabase.co/functions/v1/admin/whatsapp/create/template</code></pre>
 
-Use this POST request to upload the WhatsApp template
-
-```
-POST https://vditxnjbejitzkcfqzzv.supabase.co/functions/v1/admin/whatsapp/create/template
-```
-### Body
-
-The body of the request should include the template details, such as the company ID, WhatsApp business account (WABA) ID, template name, language, and the buttons to be included in the template. Here's an example:
-
-```json
-{
+<h3>Body</h3>
+<pre><code>{
   "company_id": "e17f3b7d-28ef-4d34-896d-ca5e11e5361c",
   "waba_id": "511841218687554",
   "name_template": "andy botoness",
@@ -297,34 +190,29 @@ The body of the request should include the template details, such as the company
       }
     ]
   }
-}
-```
----
+}</code></pre>
 
-## 📚 Tips for Development
+<hr />
 
-Here are some helpful tips for working with the Lovi API:
+<h2>📚 Tips for Development</h2>
+<ul>
+  <li>Use <code>access_key</code> when available in query parameters.</li>
+  <li>Use <code>apikey</code> or <code>Authorization: Bearer</code> in headers depending on endpoint security.</li>
+  <li>For endpoints that deal with voice or widgets, <code>session_id</code> is crucial.</li>
+  <li>Store and handle tokens securely.</li>
+</ul>
 
-- Use `access_key` when available in query parameters.
-- Use `apikey` or `Authorization: Bearer` in headers depending on endpoint security.
-- For endpoints that deal with voice or widgets, `session_id` is crucial.
-- Store and handle tokens securely.
+<hr />
 
----
+<h2>✅ Status and Monitoring</h2>
+<ul>
+  <li><code>GET /functions/v1/web/status_chat</code> → Check chat status</li>
+  <li><code>GET /functions/v1/widget</code> → Get web widget configuration</li>
+</ul>
 
-## ✅ Status and Monitoring
+<blockquote>✍️ This documentation is auto-generated based on Postman collection for Botslovers & LOVI ecosystem. For any questions, contact your API administrator.</blockquote>
 
-For checking the status and monitoring the system, you can use the following endpoints:
-
-- `GET /functions/v1/web/status_chat` → Check chat status
-- `GET /functions/v1/widget` → Get web widget configuration
-
----
-
-> ✍️ This documentation is auto-generated based on Postman collection for Botslovers & LOVI ecosystem. For any questions, contact your API administrator.
-
----
-
-## 📎 Resources
-
-- [Postman Collection Viewer](https://orange-crescent-213922.postman.co/workspace/Botslovers-Intregrations~a73d6175-7625-4e61-829a-93a8a9b8d923/collection/11282424-6847fe38-8dff-4610-8219-f7c374516030)
+<h2>📎 Resources</h2>
+<ul>
+  <li><a href="https://orange-crescent-213922.postman.co/workspace/Botslovers-Intregrations~a73d6175-7625-4e61-829a-93a8a9b8d923/collection/11282424-6847fe38-8dff-4610-8219-f7c374516030" target="_blank">Postman Collection Viewer</a></li>
+</ul>
