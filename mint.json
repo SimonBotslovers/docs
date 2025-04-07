@@ -64,14 +64,6 @@
       "group": "API Documentation",
       "pages": [
         "api-reference/api_whatsapp_en",
-        {
-          "group": "Endpoint Examples",
-          "pages": [
-            "api-reference/endpoint/get",
-            "api-reference/endpoint/create",
-            "api-reference/endpoint/delete"
-          ]
-        }
       ]
     }
   ],
