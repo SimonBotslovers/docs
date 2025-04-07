@@ -5,18 +5,13 @@ description: "Official documentation for interacting with Lovi's API via Postman
 
 Intro
 
-
 This manual describes in a practical way the methodology for connecting and accessing Lovi API services, allowing the sending of notifications via WhatsApp. Authentication is performed using tokens that enable basic authentication for the API services.
 
 🔑 Authentication
 
-
 To access any Lovi API endpoint, you first need to authenticate by sending a POST request to the authentication endpoint with your email and password. In response, you'll receive a personal access token.
 
-
-Token Rotation
-
-: We recommend periodically rotating tokens and storing them securely.
+Token Rotation: We recommend periodically rotating tokens and storing them securely.
 
 Authentication Endpoint
 
@@ -57,7 +52,6 @@ Response
 
 🧭 Retrieve Company API Keys
 
-
 Endpoint
 
 ```
@@ -89,17 +83,9 @@ Response
 
 🔁 Token per Company
 
+Once you identify which company you want to work with, you must authenticate again to generate a company-level token. This is usually required for secured actions like sending notifications or uploading media.
 
-Once you identify which company you want to work with, you must authenticate again to generate a company-level token
-
-. This is usually required for secured actions like sending notifications or uploading media.
-
-
-You will use the previously retrieved <code>
-  access_key
-</code>
-
- in your query parameters or headers, depending on the endpoint.
+You will use the previously retrieved <code>access_key</code> in your query parameters or headers, depending on the endpoint.
 
 <hr />
 
@@ -135,61 +121,19 @@ Body
 }
 ```
 
-<ul>
-components_push.body_text_0
-
-: Where the recipient's name or other dynamic data will be inserted.
-
-
-components_push.body_text_1
-
-: Predefined text included in the notification.
-
-
-contact.number
-
-: The recipient's phone number.
-
-
-contact.name
-
-: The recipient's name.
-
-
-language_template
-
-: e.g., <code>
-  es_ES
-</code>
-
- for Spanish.
-
-
-name_template
-
-: Name of the approved WhatsApp template.
-
-
-recipient_id
-
-: Unique identifier for the recipient.
-
-
-notification_type
-
-: Like "marketing".
-
-
-campaign_name
-
-: Name of the campaign.
-
-</ul>
+- components_push.body_text_0: Where the recipient's name or other dynamic data will be inserted.
+- components_push.body_text_1: Predefined text included in the notification.
+- contact.number: The recipient's phone number.
+- contact.name: The recipient's name.
+- language_template: e.g., <code>es_ES</code> for Spanish.
+- name_template: Name of the approved WhatsApp template.
+- recipient_id: Unique identifier for the recipient.
+- notification_type: Like "marketing".
+- campaign_name: Name of the campaign.
 
 <hr />
 
 🔊 Upload Audio
-
 
 POST to:
 
@@ -199,33 +143,10 @@ https://cloud.lovi.ai/functions/v1/voice/upload
 
 Form Data
 
-<table>
-<thead>
-Field
-
-Type
-
-Description
-
-</thead>
-
-<tbody>
-session_id
-
-text
-
-Unique session ID
-
-
-audio
-
-file
-
-Audio file to upload
-
-</tbody>
-
-</table>
+| Field | Type | Description |
+|-------|------|-------------|
+| session_id | text | Unique session ID |
+| audio | file | Audio file to upload |
 
 <hr />
 
@@ -338,61 +259,20 @@ Body
 
 📚 Tips for Development
 
-<ul>
-Use <code>
-  access_key
-</code>
-
- when available in query parameters.
-
-
-Use <code>
-  apikey
-</code>
-
- or <code>
-  Authorization: Bearer
-</code>
-
- in headers depending on endpoint security.
-
-
-For endpoints that deal with voice or widgets, <code>
-  session_id
-</code>
-
- is crucial.
-
-
-Store and handle tokens securely.
-
-</ul>
+- Use <code>access_key</code> when available in query parameters.
+- Use <code>apikey</code> or <code>Authorization: Bearer</code> in headers depending on endpoint security.
+- For endpoints that deal with voice or widgets, <code>session_id</code> is crucial.
+- Store and handle tokens securely.
 
 <hr />
 
 ✅ Status and Monitoring
 
-<ul>
-<code>
-  GET /functions/v1/web/status_chat
-</code>
-
- → Check chat status
-
-
-<code>
-  GET /functions/v1/widget
-</code>
-
- → Get web widget configuration
-
-</ul>
+- <code>GET /functions/v1/web/status_chat</code> → Check chat status
+- <code>GET /functions/v1/widget</code> → Get web widget configuration
 
 ✍️ This documentation is auto-generated based on Postman collection for Botslovers & LOVI ecosystem. For any questions, contact your API administrator.
 
 📎 Resources
 
-<ul>
-Postman Collection Viewer
-
-</ul>
+- Postman Collection Viewer
