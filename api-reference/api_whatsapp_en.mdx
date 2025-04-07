@@ -57,3 +57,51 @@ If the request is successful, you'll receive a response containing your access t
 > 📌 Important: Save this token — you'll use it to interact with the rest of the API.
 
 ---
+## 🧭 Retrieve Company API Keys
+
+After obtaining your token, the next step is to retrieve the list of API keys for the companies your user has access to.
+
+### Endpoint
+
+
+The request to retrieve the API keys is also a **POST** request:
+
+```
+POST https://cloud.lovi.ai/functions/v1/api_keys
+```
+
+### Headers
+
+
+You need to include the **access token** in the request headers like this:
+
+```json
+{
+  "Authorization": "Bearer your-personal-access-token"
+}
+```
+
+### Response
+
+The response will contain a list of API keys for the companies your user has access to, along with their respective company IDs:
+
+```json
+[
+  {
+    "company_id": "example-company-id",
+    "access_key": "example-access-key"
+  }
+]
+```
+
+> 📝 Each company will have a unique access key. You must use the correct key depending on which company you're interacting with.
+
+---
+
+### 🔁 Token per Company
+
+Once you identify which company you want to work with, you must authenticate again to generate a **company-level token**. This is usually required for secured actions like sending notifications or uploading media.
+
+You will use the previously retrieved `access_key` in your query parameters or headers, depending on the endpoint.
+
+---
