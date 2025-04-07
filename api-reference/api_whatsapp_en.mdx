@@ -21,7 +21,6 @@ To obtain your access token, send a POST request to the following URL:
 ```
 POST https://cloud.lovi.ai/auth/v1/token?grant_type=password
 ```
-
 ### Headers
 
 You need to include the following header in your request to indicate that the content you're sending is in JSON format:
@@ -31,7 +30,6 @@ You need to include the following header in your request to indicate that the co
   "Content-Type": "application/json"
 }
 ```
-
 ### Body
 In the body of your request, securely send your email and password in JSON format:
 
@@ -41,7 +39,6 @@ In the body of your request, securely send your email and password in JSON forma
   "password": "your-secure-password"
 }
 ```
-
 ### Response
 
 If the request is successful, you'll receive a response containing your access token. You'll use this token to interact with the other API endpoints.
@@ -117,7 +114,6 @@ To send a notification, you'll need to send a POST request to the following endp
 ```
 POST https://cloud.lovi.ai/functions/v1/notify?access_key=your-access-key&unflatten=true
 ```
-
 ### Headers
 
 You’ll need to include the API key in the request headers for authorization:
@@ -127,7 +123,6 @@ You’ll need to include the API key in the request headers for authorization:
   "apikey": "your-api-key"
 }
 ```
-
 ### Body
 
 In the body of the request, you’ll send the notification details, including placeholders for dynamic data (such as {{name}}). Here's an example:
@@ -175,7 +170,6 @@ Use this POST request to upload the audio:
 ```
 POST https://cloud.lovi.ai/functions/v1/voice/upload
 ```
-
 ### Form Data
 
 The form data should include the following fields:
@@ -196,7 +190,6 @@ To reinvite a user, use this **POST** request:
 ```
 POST https://cloud.lovi.ai/functions/v1/users/reinvite
 ```
-
 ### Invite User
 
 To invite a new user, use this **POST** request:
@@ -204,7 +197,6 @@ To invite a new user, use this **POST** request:
 ```
 POST https://d975-46-27-0-124.ngrok-free.app/functions/v1/users/invite
 ```
-
 ### Body
 
 The body of the request should include the user's email and the company name. Here's an example with anonymized information:
@@ -238,7 +230,6 @@ Include the authorization header with your personal access token:
   "Authorization": "Bearer your-personal-access-token"
 }
 ```
-
 ### Body
 
 The body of the request should include the company name and the email address. Here's an example:
@@ -249,7 +240,6 @@ The body of the request should include the company name and the email address. H
   "email": "user@example.com"
 }
 ```
-
 ---
 
 ## 📥 Upload WhatsApp Template
@@ -263,7 +253,6 @@ Use this POST request to upload the WhatsApp template
 ```
 POST https://vditxnjbejitzkcfqzzv.supabase.co/functions/v1/admin/whatsapp/create/template
 ```
-
 ### Body
 
 The body of the request should include the template details, such as the company ID, WhatsApp business account (WABA) ID, template name, language, and the buttons to be included in the template. Here's an example:
@@ -310,7 +299,6 @@ The body of the request should include the template details, such as the company
   }
 }
 ```
-
 ---
 
 ## 📚 Tips for Development
