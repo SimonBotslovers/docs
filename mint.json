@@ -26,11 +26,15 @@
     "url": "https://lovi-front.botslovers.com/"
   },
   "tabs": [
-    {
-      "name": "API Reference",
-      "url": "api-reference"
-    }
-  ],
+  {
+    "name": "User Guide",
+    "url": "user-guide"
+  },
+  {
+    "name": "API Reference",
+    "url": "api-reference"
+  }
+],
   "navigation": [
     {
       "group": "Get Started",
