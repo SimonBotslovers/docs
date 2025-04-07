@@ -1,88 +1,116 @@
-<h1>Lovi Cloud API Documentation</h1>
-<blockquote>
-  ⚙️ Official documentation for interacting with Lovi's API via Postman.
-</blockquote>
+---
+title: "API WhatsApp"
+description: "Description of your new file."
+---
 
-<hr />
+# Lovi Cloud API Documentation
 
-<h2>🔑 Authentication</h2>
-<p>To access any Lovi API endpoint, you must authenticate and obtain a personal access token.</p>
+> ⚙️ Official documentation for interacting with Lovi's API via Postman.
 
-<h3>Endpoint</h3>
-<pre><code>POST https://cloud.lovi.ai/auth/v1/token?grant_type=password</code></pre>
+---
 
-<h3>Headers</h3>
-<pre><code>{
+## 🔑 Authentication
+
+To access any Lovi API endpoint, you must authenticate and obtain a personal access token.
+
+### Endpoint
+
+```
+POST https://cloud.lovi.ai/auth/v1/token?grant_type=password
+```
+
+### Headers
+
+```json
+{
   "Content-Type": "application/json"
-}</code></pre>
+}
+```
 
-<h3>Body</h3>
-<pre><code>{
+### Body
+
+```json
+{
   "email": "your-email@example.com",
   "password": "your-secure-password"
-}</code></pre>
+}
+```
 
-<h3>Response</h3>
-<pre><code>{
+### Response
+
+```json
+{
   "access_token": "your-personal-access-token",
   "token_type": "bearer",
   "expires_in": 3600
-}</code></pre>
+}
+```
 
-<blockquote>
-  📌 Save this token — you’ll use it to interact with the rest of the API.
-</blockquote>
+> 📌 Save this token — you'll use it to interact with the rest of the API.
 
-<hr />
+---
 
-<h2>🧭 Retrieve Company API Keys</h2>
-<p>After obtaining your token, the next step is to retrieve the list of API keys for the companies your user has access to.</p>
+## 🧭 Retrieve Company API Keys
 
-<h3>Endpoint</h3>
-<pre><code>POST https://cloud.lovi.ai/functions/v1/api_keys</code></pre>
+After obtaining your token, the next step is to retrieve the list of API keys for the companies your user has access to.
 
-<h3>Headers</h3>
-<pre><code>{
+### Endpoint
+
+```
+POST https://cloud.lovi.ai/functions/v1/api_keys
+```
+
+### Headers
+
+```json
+{
   "Authorization": "Bearer your-personal-access-token"
-}</code></pre>
+}
+```
 
-<h3>Response</h3>
-<pre><code>[
+### Response
+
+```json
+[
   {
     "company_id": "example-company-id",
     "access_key": "example-access-key"
   }
-]</code></pre>
+]
+```
 
-<blockquote>
-  📝 Each company will have a unique access key. You must use the correct key depending on which company you’re interacting with.
-</blockquote>
+> 📝 Each company will have a unique access key. You must use the correct key depending on which company you're interacting with.
 
-<hr />
+---
 
-<h2>🔁 Token per Company</h2>
-<p>
-  Once you identify which company you want to work with, you must authenticate again to generate a 
-  <strong>company-level token</strong>. This is usually required for secured actions like sending notifications or uploading media.
-</p>
-<p>
-  You will use the previously retrieved <code>access_key</code> in your query parameters or headers, depending on the endpoint.
-</p>
+## 🔁 Token per Company
 
-<hr />
+Once you identify which company you want to work with, you must authenticate again to generate a **company-level token**. This is usually required for secured actions like sending notifications or uploading media.
 
-<h2>📣 Send Notification</h2>
+You will use the previously retrieved `access_key` in your query parameters or headers, depending on the endpoint.
 
-<h3>Endpoint</h3>
-<pre><code>POST https://cloud.lovi.ai/functions/v1/notify?access_key=your-access-key&unflatten=true</code></pre>
+---
 
-<h3>Headers</h3>
-<pre><code>{
+## 📣 Send Notification
+
+### Endpoint
+
+```
+POST https://cloud.lovi.ai/functions/v1/notify?access_key=your-access-key&unflatten=true
+```
+
+### Headers
+
+```json
+{
   "apikey": "your-api-key"
-}</code></pre>
+}
+```
 
-<h3>Body</h3>
-<pre><code>{
+### Body
+
+```json
+{
   "components_push.body_text_0": "{{name}}",
   "components_push.body_text_1": "Técnico en Cuidados Auxiliares de Enfermería",
   "contact.number": "34666033135",
@@ -92,71 +120,92 @@
   "recipient_id": "34919469323",
   "notification_type": "marketing",
   "campaign_name": "Prueba Webservice"
-}</code></pre>
+}
+```
 
-<hr />
+---
 
-<h2>🔊 Upload Audio</h2>
+## 🔊 Upload Audio
 
-<h3>Endpoint</h3>
-<pre><code>POST https://cloud.lovi.ai/functions/v1/voice/upload</code></pre>
+### Endpoint
 
-<h3>Form Data</h3>
-<table>
-  <thead>
-    <tr>
-      <th>Field</th><th>Type</th><th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td>session_id</td><td>text</td><td>Unique session ID</td></tr>
-    <tr><td>audio</td><td>file</td><td>Audio file to upload</td></tr>
-  </tbody>
-</table>
+```
+POST https://cloud.lovi.ai/functions/v1/voice/upload
+```
 
-<hr />
+### Form Data
 
-<h2>🧑‍💼 Invite/Reinvite User</h2>
+| Field | Type | Description |
+| --- | --- | --- |
+| session_id | text | Unique session ID |
+| audio | file | Audio file to upload |
 
-<h3>Reinvite User</h3>
-<pre><code>POST https://cloud.lovi.ai/functions/v1/users/reinvite</code></pre>
+---
 
-<h3>Invite User</h3>
-<pre><code>POST https://d975-46-27-0-124.ngrok-free.app/functions/v1/users/invite</code></pre>
+## 🧑‍💼 Invite/Reinvite User
 
-<h3>Body</h3>
-<pre><code>{
+### Reinvite User
+
+```
+POST https://cloud.lovi.ai/functions/v1/users/reinvite
+```
+
+### Invite User
+
+```
+POST https://d975-46-27-0-124.ngrok-free.app/functions/v1/users/invite
+```
+
+### Body
+
+```json
+{
   "email": "jiersonj@gmail.com",
   "name_companie": "Botslovers"
-}</code></pre>
+}
+```
 
-<hr />
+---
 
-<h2>🏢 Create New Company</h2>
+## 🏢 Create New Company
 
-<h3>Endpoint</h3>
-<pre><code>POST https://cloud.lovi.ai/functions/v1/newcustomer</code></pre>
+### Endpoint
 
-<h3>Headers</h3>
-<pre><code>{
+```
+POST https://cloud.lovi.ai/functions/v1/newcustomer
+```
+
+### Headers
+
+```json
+{
   "Authorization": "Bearer your-personal-access-token"
-}</code></pre>
+}
+```
 
-<h3>Body</h3>
-<pre><code>{
+### Body
+
+```json
+{
   "companie": "Saniempleo",
   "email": "daniel.fernandez@botslovers.com"
-}</code></pre>
+}
+```
 
-<hr />
+---
 
-<h2>📥 Upload WhatsApp Template</h2>
+## 📥 Upload WhatsApp Template
 
-<h3>Endpoint</h3>
-<pre><code>POST https://vditxnjbejitzkcfqzzv.supabase.co/functions/v1/admin/whatsapp/create/template</code></pre>
+### Endpoint
 
-<h3>Body</h3>
-<pre><code>{
+```
+POST https://vditxnjbejitzkcfqzzv.supabase.co/functions/v1/admin/whatsapp/create/template
+```
+
+### Body
+
+```json
+{
   "company_id": "e17f3b7d-28ef-4d34-896d-ca5e11e5361c",
   "waba_id": "511841218687554",
   "name_template": "andy botoness",
@@ -195,35 +244,31 @@
       }
     ]
   }
-}</code></pre>
+}
+```
 
-<hr />
+---
 
-<h2>📚 Tips for Development</h2>
-<ul>
-  <li>Use <code>access_key</code> when available in query parameters.</li>
-  <li>Use <code>apikey</code> or <code>Authorization: Bearer</code> in headers depending on endpoint security.</li>
-  <li>For endpoints that deal with voice or widgets, <code>session_id</code> is crucial.</li>
-  <li>Store and handle tokens securely.</li>
-</ul>
+## 📚 Tips for Development
 
-<hr />
+- Use `access_key` when available in query parameters.
+- Use `apikey` or `Authorization: Bearer` in headers depending on endpoint security.
+- For endpoints that deal with voice or widgets, `session_id` is crucial.
+- Store and handle tokens securely.
 
-<h2>✅ Status and Monitoring</h2>
-<ul>
-  <li><code>GET /functions/v1/web/status_chat</code> → Check chat status</li>
-  <li><code>GET /functions/v1/widget</code> → Get web widget configuration</li>
-</ul>
+---
 
-<hr />
+## ✅ Status and Monitoring
 
-<blockquote>
-✍️ This documentation is auto-generated based on Postman collection for Botslovers & LOVI ecosystem. For any questions, contact your API administrator.
-</blockquote>
+- `GET /functions/v1/web/status_chat` → Check chat status
+- `GET /functions/v1/widget` → Get web widget configuration
 
-<hr />
+---
 
-<h2>📎 Resources</h2>
-<ul>
-  <li><a href="https://orange-crescent-213922.postman.co/workspace/Botslovers-Intregrations~a73d6175-7625-4e61-829a-93a8a9b8d923/collection/11282424-6847fe38-8dff-4610-8219-f7c374516030" target="_blank">Postman Collection Viewer</a></li>
-</ul>
+> ✍️ This documentation is auto-generated based on Postman collection for Botslovers & LOVI ecosystem. For any questions, contact your API administrator.
+
+---
+
+## 📎 Resources
+
+- [Postman Collection Viewer](https://orange-crescent-213922.postman.co/workspace/Botslovers-Intregrations~a73d6175-7625-4e61-829a-93a8a9b8d923/collection/11282424-6847fe38-8dff-4610-8219-f7c374516030)
