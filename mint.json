@@ -63,14 +63,6 @@
       "group": "API Documentation",
       "pages": [
         "api-reference/api_whatsapp_en",
-        {
-          "group": "",
-          "pages": [
-            "",
-            "",
-            ""
-          ]
-        }
       ]
     }
   ],
