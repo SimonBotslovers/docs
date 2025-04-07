@@ -64,11 +64,11 @@
       "pages": [
         "api-reference/api_whatsapp_en",
         {
-          "group": "Endpoint Examples",
+          "group": "",
           "pages": [
-            "api-reference/endpoint/get",
-            "api-reference/endpoint/create",
-            "api-reference/endpoint/delete"
+            "",
+            "",
+            ""
           ]
         }
       ]
