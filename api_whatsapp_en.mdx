@@ -1,0 +1,205 @@
+---
+title: "API WhatsApp"
+description: "Description of your new file."
+---
+
+# Lovi Cloud API Documentation
+
+> ⚙️ Official documentation for interacting with Lovi's API via Postman.
+
+---
+
+## 🔑 Authentication
+
+To access any Lovi API endpoint, you must authenticate and obtain a personal access token.
+
+### Endpoint
+
+```
+POST https://cloud.lovi.ai/auth/v1/token?grant_type=password
+```
+
+### Headers
+
+```json
+{
+  "Content-Type": "application/json"
+}
+```
+
+### Body
+
+```json
+{
+  "email": "your-email@example.com",
+  "password": "your-secure-password"
+}
+```
+
+### Response
+
+```json
+{
+  "access_token": "your-personal-access-token",
+  "token_type": "bearer",
+  "expires_in": 3600
+}
+```
+
+> 📌 Save this token — you'll use it to interact with the rest of the API.
+
+---
+
+## 🧭 Retrieve Company API Keys
+
+After obtaining your token, the next step is to retrieve the list of API keys for the companies your user has access to.
+
+### Endpoint
+
+```
+POST https://cloud.lovi.ai/functions/v1/api_keys
+```
+
+### Headers
+
+```json
+{
+  "Authorization": "Bearer your-personal-access-token"
+}
+```
+
+### Response
+
+```json
+[
+  {
+    "company_id": "example-company-id",
+    "access_key": "example-access-key"
+  }
+]
+```
+
+> 📝 Each company will have a unique access key. You must use the correct key depending on which company you're interacting with.
+
+---
+
+## 🔁 Token per Company
+
+Once you identify which company you want to work with, you must authenticate again to generate a **company-level token**. This is usually required for secured actions like sending notifications or uploading media.
+
+You will use the previously retrieved `access_key` in your query parameters or headers, depending on the endpoint.
+
+---
+
+## 📣 Send Notification
+
+### Endpoint
+
+```
+POST https://cloud.lovi.ai/functions/v1/notify?access_key=your-access-key&unflatten=true
+```
+
+### Headers
+
+```json
+{
+  "apikey": "your-api-key"
+}
+```
+
+### Body
+
+```json
+{
+  "components_push.body_text_0": "{{name}}",
+  "components_push.body_text_1": "Técnico en Cuidados Auxiliares de Enfermería",
+  "contact.number": "34666033135",
+  "contact.name": "Jierson",
+  "language_template": "es_ES",
+  "name_template": "fppro_enfermeria",
+  "recipient_id": "34919469323",
+  "notification_type": "marketing",
+  "campaign_name": "Prueba Webservice"
+}
+```
+
+---
+
+## 📥 WhatsApp Create  Template
+
+### Endpoint
+
+```
+POST https://cloud.lovi.ai/functions/v1/admin/whatsapp/create/template
+```
+
+### Body
+
+```json
+{
+  "company_id": "e17f3b7d-28ef-4d34-896d-ca5e11e5361c",
+  "waba_id": "511841218687554",
+  "name_template": "andy botoness",
+  "language_template": "es_ES",
+  "category_template": "MARKETING",
+  "components_template": {
+    "BODY": {
+      "text": "El siguiente mensaje es un mensaje de prueba para mirar los botones que se pueden crear en un mensaje de WhatsApp"
+    },
+    "BUTTONS": [
+      {
+        "type": "QUICK_REPLY",
+        "text": "hablar con un agente"
+      },
+      {
+        "type": "QUICK_REPLY",
+        "text": "Que es lo que haces"
+      },
+      {
+        "type": "QUICK_REPLY",
+        "text": "quiero comprar"
+      },
+      {
+        "type": "QUICK_REPLY",
+        "text": "quiero vender"
+      },
+      {
+        "type": "URL",
+        "url": "https://www.botslovers.com",
+        "text": "Visit Website"
+      },
+      {
+        "type": "URL",
+        "url": "https://www.lovi.ai",
+        "text": "Mira lo que hacemos"
+      }
+    ]
+  }
+}
+```
+
+---
+
+## 📚 Tips for Development
+
+- Use `access_key` when available in query parameters.
+- Use `apikey` or `Authorization: Bearer` in headers depending on endpoint security.
+- For endpoints that deal with voice or widgets, `session_id` is crucial.
+- Store and handle tokens securely.
+
+---
+
+## ✅ Status and Monitoring
+
+- `GET /functions/v1/web/status_chat` → Check chat status
+- `GET /functions/v1/widget` → Get web widget configuration
+
+---
+
+> ✍️ This documentation is auto-generated based on Postman collection for Botslovers & LOVI ecosystem. For any questions, contact your API administrator.
+
+---
+
+## 📎 Resources
+
+- [Postman Collection Viewer](https://orange-crescent-213922.postman.co/workspace/Botslovers-Intregrations~a73d6175-7625-4e61-829a-93a8a9b8d923/collection/11282424-6847fe38-8dff-4610-8219-f7c374516030)
