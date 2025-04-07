@@ -6,25 +6,37 @@
 <p><strong>Token Rotation</strong>: We recommend periodically rotating tokens and storing them securely.</p>
 
 <h3>Authentication Endpoint</h3>
-<pre><code>POST https://cloud.lovi.ai/auth/v1/token?grant_type=password</code></pre>
+
+```
+POST https://cloud.lovi.ai/auth/v1/token?grant_type=password
+```
 
 <h3>Headers</h3>
-<pre><code>{
+
+```
+{
   "Content-Type": "application/json"
-}</code></pre>
+}
+```
 
 <h3>Body</h3>
-<pre><code>{
+
+```
+{
   "email": "your-email@example.com",
   "password": "your-secure-password"
-}</code></pre>
+}
+```
 
 <h3>Response</h3>
-<pre><code>{
+
+```
+{
   "access_token": "your-personal-access-token",
   "token_type": "bearer",
   "expires_in": 3600
-}</code></pre>
+}
+```
 
 <blockquote>📌 Important: Save this token — you'll use it to interact with the rest of the API.</blockquote>
 
@@ -32,20 +44,29 @@
 
 <h2>🧭 Retrieve Company API Keys</h2>
 <h3>Endpoint</h3>
-<pre><code>POST https://cloud.lovi.ai/functions/v1/api_keys</code></pre>
+
+```
+POST https://cloud.lovi.ai/functions/v1/api_keys
+```
 
 <h3>Headers</h3>
-<pre><code>{
+
+```
+{
   "Authorization": "Bearer your-personal-access-token"
-}</code></pre>
+}
+```
 
 <h3>Response</h3>
-<pre><code>[
+
+```
+[
   {
     "company_id": "example-company-id",
     "access_key": "example-access-key"
   }
-]</code></pre>
+]
+```
 
 <blockquote>📝 Each company will have a unique access key. You must use the correct key depending on which company you're interacting with.</blockquote>
 
@@ -60,15 +81,23 @@
 <h2>📣 Send Notification</h2>
 
 <h3>Endpoint</h3>
-<pre><code>POST https://cloud.lovi.ai/functions/v1/notify?access_key=your-access-key&unflatten=true</code></pre>
+
+```
+POST https://cloud.lovi.ai/functions/v1/notify?access_key=your-access-key&unflatten=true
+```
 
 <h3>Headers</h3>
-<pre><code>{
+
+```
+{
   "apikey": "your-api-key"
-}</code></pre>
+}
+```
 
 <h3>Body</h3>
-<pre><code>{
+
+```
+{
   "components_push.body_text_0": "{{name}}",
   "components_push.body_text_1": "Technical in Nursing Care Assistance",
   "contact.number": "34666033135",
@@ -78,10 +107,11 @@
   "recipient_id": "1234",
   "notification_type": "marketing",
   "campaign_name": "Example Campaign"
-}</code></pre>
+}
+```
 
 <ul>
-  <li><strong>components_push.body_text_0</strong>: Where the recipient’s name or other dynamic data will be inserted.</li>
+  <li><strong>components_push.body_text_0</strong>: Where the recipient's name or other dynamic data will be inserted.</li>
   <li><strong>components_push.body_text_1</strong>: Predefined text included in the notification.</li>
   <li><strong>contact.number</strong>: The recipient's phone number.</li>
   <li><strong>contact.name</strong>: The recipient's name.</li>
@@ -96,7 +126,10 @@
 
 <h2>🔊 Upload Audio</h2>
 <p>POST to:</p>
-<pre><code>https://cloud.lovi.ai/functions/v1/voice/upload</code></pre>
+
+```
+https://cloud.lovi.ai/functions/v1/voice/upload
+```
 
 <h3>Form Data</h3>
 <table>
@@ -114,44 +147,67 @@
 <h2>🧑‍💼 Invite/Reinvite User</h2>
 
 <h3>Reinvite</h3>
-<pre><code>POST https://cloud.lovi.ai/functions/v1/users/reinvite</code></pre>
+
+```
+POST https://cloud.lovi.ai/functions/v1/users/reinvite
+```
 
 <h3>Invite</h3>
-<pre><code>POST https://d975-46-27-0-124.ngrok-free.app/functions/v1/users/invite</code></pre>
+
+```
+POST https://d975-46-27-0-124.ngrok-free.app/functions/v1/users/invite
+```
 
 <h3>Body</h3>
-<pre><code>{
+
+```
+{
   "email": "user@example.com",
   "name_companie": "ExampleCompany"
-}</code></pre>
+}
+```
 
 <hr />
 
 <h2>🏢 Create New Company</h2>
 
 <h3>Endpoint</h3>
-<pre><code>POST https://cloud.lovi.ai/functions/v1/newcustomer</code></pre>
+
+```
+POST https://cloud.lovi.ai/functions/v1/newcustomer
+```
 
 <h3>Headers</h3>
-<pre><code>{
+
+```
+{
   "Authorization": "Bearer your-personal-access-token"
-}</code></pre>
+}
+```
 
 <h3>Body</h3>
-<pre><code>{
+
+```
+{
   "companie": "ExampleCompany",
   "email": "user@example.com"
-}</code></pre>
+}
+```
 
 <hr />
 
 <h2>📥 Upload WhatsApp Template</h2>
 
 <h3>Endpoint</h3>
-<pre><code>POST https://vditxnjbejitzkcfqzzv.supabase.co/functions/v1/admin/whatsapp/create/template</code></pre>
+
+```
+POST https://vditxnjbejitzkcfqzzv.supabase.co/functions/v1/admin/whatsapp/create/template
+```
 
 <h3>Body</h3>
-<pre><code>{
+
+```
+{
   "company_id": "e17f3b7d-28ef-4d34-896d-ca5e11e5361c",
   "waba_id": "511841218687554",
   "name_template": "andy botoness",
@@ -190,7 +246,8 @@
       }
     ]
   }
-}</code></pre>
+}
+```
 
 <hr />
 
