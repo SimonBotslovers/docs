@@ -37,7 +37,7 @@
   ],
   "navigation": [
     {
-      "group": "",
+      "group": "User Guide",
       "pages": [
         {
           "group": "Get Started",
@@ -62,13 +62,7 @@
     {
       "group": "API Documentation",
       "pages": [
-        {
-          "group": "Introduction",
-          "pages": [
-            "api-reference/introduction",
-            "api-reference/api_whatsapp_en"
-          ]
-        },
+        "api-reference/api_whatsapp_en",
         {
           "group": "Endpoint Examples",
           "pages": [
