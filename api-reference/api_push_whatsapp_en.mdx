@@ -1,17 +1,30 @@
-<h2>Intro</h2>
-<p>This manual describes in a practical way the methodology for connecting and accessing Lovi API services, allowing the sending of notifications via WhatsApp. Authentication is performed using tokens that enable basic authentication for the API services.</p>
+---
+title: "API WhatsApp Lovi"
+description: "Official documentation for interacting with Lovi's API via Postman"
+---
 
-<h2>🔑 Authentication</h2>
-<p>To access any Lovi API endpoint, you first need to authenticate by sending a POST request to the authentication endpoint with your email and password. In response, you'll receive a personal access token.</p>
-<p><strong>Token Rotation</strong>: We recommend periodically rotating tokens and storing them securely.</p>
+Intro
 
-<h3>Authentication Endpoint</h3>
+
+This manual describes in a practical way the methodology for connecting and accessing Lovi API services, allowing the sending of notifications via WhatsApp. Authentication is performed using tokens that enable basic authentication for the API services.
+
+🔑 Authentication
+
+
+To access any Lovi API endpoint, you first need to authenticate by sending a POST request to the authentication endpoint with your email and password. In response, you'll receive a personal access token.
+
+
+Token Rotation
+
+: We recommend periodically rotating tokens and storing them securely.
+
+Authentication Endpoint
 
 ```
 POST https://cloud.lovi.ai/auth/v1/token?grant_type=password
 ```
 
-<h3>Headers</h3>
+Headers
 
 ```
 {
@@ -19,7 +32,7 @@ POST https://cloud.lovi.ai/auth/v1/token?grant_type=password
 }
 ```
 
-<h3>Body</h3>
+Body
 
 ```
 {
@@ -28,7 +41,7 @@ POST https://cloud.lovi.ai/auth/v1/token?grant_type=password
 }
 ```
 
-<h3>Response</h3>
+Response
 
 ```
 {
@@ -38,18 +51,20 @@ POST https://cloud.lovi.ai/auth/v1/token?grant_type=password
 }
 ```
 
-<blockquote>📌 Important: Save this token — you'll use it to interact with the rest of the API.</blockquote>
+📌 Important: Save this token — you'll use it to interact with the rest of the API.
 
 <hr />
 
-<h2>🧭 Retrieve Company API Keys</h2>
-<h3>Endpoint</h3>
+🧭 Retrieve Company API Keys
+
+
+Endpoint
 
 ```
 POST https://cloud.lovi.ai/functions/v1/api_keys
 ```
 
-<h3>Headers</h3>
+Headers
 
 ```
 {
@@ -57,7 +72,7 @@ POST https://cloud.lovi.ai/functions/v1/api_keys
 }
 ```
 
-<h3>Response</h3>
+Response
 
 ```
 [
@@ -68,25 +83,35 @@ POST https://cloud.lovi.ai/functions/v1/api_keys
 ]
 ```
 
-<blockquote>📝 Each company will have a unique access key. You must use the correct key depending on which company you're interacting with.</blockquote>
+📝 Each company will have a unique access key. You must use the correct key depending on which company you're interacting with.
 
 <hr />
 
-<h2>🔁 Token per Company</h2>
-<p>Once you identify which company you want to work with, you must authenticate again to generate a <strong>company-level token</strong>. This is usually required for secured actions like sending notifications or uploading media.</p>
-<p>You will use the previously retrieved <code>access_key</code> in your query parameters or headers, depending on the endpoint.</p>
+🔁 Token per Company
+
+
+Once you identify which company you want to work with, you must authenticate again to generate a company-level token
+
+. This is usually required for secured actions like sending notifications or uploading media.
+
+
+You will use the previously retrieved <code>
+  access_key
+</code>
+
+ in your query parameters or headers, depending on the endpoint.
 
 <hr />
 
-<h2>📣 Send Notification</h2>
+📣 Send Notification
 
-<h3>Endpoint</h3>
+Endpoint
 
 ```
 POST https://cloud.lovi.ai/functions/v1/notify?access_key=your-access-key&unflatten=true
 ```
 
-<h3>Headers</h3>
+Headers
 
 ```
 {
@@ -94,7 +119,7 @@ POST https://cloud.lovi.ai/functions/v1/notify?access_key=your-access-key&unflat
 }
 ```
 
-<h3>Body</h3>
+Body
 
 ```
 {
@@ -111,54 +136,114 @@ POST https://cloud.lovi.ai/functions/v1/notify?access_key=your-access-key&unflat
 ```
 
 <ul>
-  <li><strong>components_push.body_text_0</strong>: Where the recipient's name or other dynamic data will be inserted.</li>
-  <li><strong>components_push.body_text_1</strong>: Predefined text included in the notification.</li>
-  <li><strong>contact.number</strong>: The recipient's phone number.</li>
-  <li><strong>contact.name</strong>: The recipient's name.</li>
-  <li><strong>language_template</strong>: e.g., <code>es_ES</code> for Spanish.</li>
-  <li><strong>name_template</strong>: Name of the approved WhatsApp template.</li>
-  <li><strong>recipient_id</strong>: Unique identifier for the recipient.</li>
-  <li><strong>notification_type</strong>: Like "marketing".</li>
-  <li><strong>campaign_name</strong>: Name of the campaign.</li>
+components_push.body_text_0
+
+: Where the recipient's name or other dynamic data will be inserted.
+
+
+components_push.body_text_1
+
+: Predefined text included in the notification.
+
+
+contact.number
+
+: The recipient's phone number.
+
+
+contact.name
+
+: The recipient's name.
+
+
+language_template
+
+: e.g., <code>
+  es_ES
+</code>
+
+ for Spanish.
+
+
+name_template
+
+: Name of the approved WhatsApp template.
+
+
+recipient_id
+
+: Unique identifier for the recipient.
+
+
+notification_type
+
+: Like "marketing".
+
+
+campaign_name
+
+: Name of the campaign.
+
 </ul>
 
 <hr />
 
-<h2>🔊 Upload Audio</h2>
-<p>POST to:</p>
+🔊 Upload Audio
+
+
+POST to:
 
 ```
 https://cloud.lovi.ai/functions/v1/voice/upload
 ```
 
-<h3>Form Data</h3>
+Form Data
+
 <table>
-  <thead>
-    <tr><th>Field</th><th>Type</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr><td>session_id</td><td>text</td><td>Unique session ID</td></tr>
-    <tr><td>audio</td><td>file</td><td>Audio file to upload</td></tr>
-  </tbody>
+<thead>
+Field
+
+Type
+
+Description
+
+</thead>
+
+<tbody>
+session_id
+
+text
+
+Unique session ID
+
+
+audio
+
+file
+
+Audio file to upload
+
+</tbody>
+
 </table>
 
 <hr />
 
-<h2>🧑‍💼 Invite/Reinvite User</h2>
+🧑‍💼 Invite/Reinvite User
 
-<h3>Reinvite</h3>
+Reinvite
 
 ```
 POST https://cloud.lovi.ai/functions/v1/users/reinvite
 ```
 
-<h3>Invite</h3>
+Invite
 
 ```
 POST https://d975-46-27-0-124.ngrok-free.app/functions/v1/users/invite
 ```
 
-<h3>Body</h3>
+Body
 
 ```
 {
@@ -169,15 +254,15 @@ POST https://d975-46-27-0-124.ngrok-free.app/functions/v1/users/invite
 
 <hr />
 
-<h2>🏢 Create New Company</h2>
+🏢 Create New Company
 
-<h3>Endpoint</h3>
+Endpoint
 
 ```
 POST https://cloud.lovi.ai/functions/v1/newcustomer
 ```
 
-<h3>Headers</h3>
+Headers
 
 ```
 {
@@ -185,7 +270,7 @@ POST https://cloud.lovi.ai/functions/v1/newcustomer
 }
 ```
 
-<h3>Body</h3>
+Body
 
 ```
 {
@@ -196,15 +281,15 @@ POST https://cloud.lovi.ai/functions/v1/newcustomer
 
 <hr />
 
-<h2>📥 Upload WhatsApp Template</h2>
+📥 Upload WhatsApp Template
 
-<h3>Endpoint</h3>
+Endpoint
 
 ```
 POST https://vditxnjbejitzkcfqzzv.supabase.co/functions/v1/admin/whatsapp/create/template
 ```
 
-<h3>Body</h3>
+Body
 
 ```
 {
@@ -251,25 +336,63 @@ POST https://vditxnjbejitzkcfqzzv.supabase.co/functions/v1/admin/whatsapp/create
 
 <hr />
 
-<h2>📚 Tips for Development</h2>
+📚 Tips for Development
+
 <ul>
-  <li>Use <code>access_key</code> when available in query parameters.</li>
-  <li>Use <code>apikey</code> or <code>Authorization: Bearer</code> in headers depending on endpoint security.</li>
-  <li>For endpoints that deal with voice or widgets, <code>session_id</code> is crucial.</li>
-  <li>Store and handle tokens securely.</li>
+Use <code>
+  access_key
+</code>
+
+ when available in query parameters.
+
+
+Use <code>
+  apikey
+</code>
+
+ or <code>
+  Authorization: Bearer
+</code>
+
+ in headers depending on endpoint security.
+
+
+For endpoints that deal with voice or widgets, <code>
+  session_id
+</code>
+
+ is crucial.
+
+
+Store and handle tokens securely.
+
 </ul>
 
 <hr />
 
-<h2>✅ Status and Monitoring</h2>
+✅ Status and Monitoring
+
 <ul>
-  <li><code>GET /functions/v1/web/status_chat</code> → Check chat status</li>
-  <li><code>GET /functions/v1/widget</code> → Get web widget configuration</li>
+<code>
+  GET /functions/v1/web/status_chat
+</code>
+
+ → Check chat status
+
+
+<code>
+  GET /functions/v1/widget
+</code>
+
+ → Get web widget configuration
+
 </ul>
 
-<blockquote>✍️ This documentation is auto-generated based on Postman collection for Botslovers & LOVI ecosystem. For any questions, contact your API administrator.</blockquote>
+✍️ This documentation is auto-generated based on Postman collection for Botslovers & LOVI ecosystem. For any questions, contact your API administrator.
 
-<h2>📎 Resources</h2>
+📎 Resources
+
 <ul>
-  <li><a href="https://orange-crescent-213922.postman.co/workspace/Botslovers-Intregrations~a73d6175-7625-4e61-829a-93a8a9b8d923/collection/11282424-6847fe38-8dff-4610-8219-f7c374516030" target="_blank">Postman Collection Viewer</a></li>
+Postman Collection Viewer
+
 </ul>
