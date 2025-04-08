@@ -9,7 +9,7 @@ This manual describes in a practical way the methodology for connecting and acce
 
 ### 🔑 Authentication
 
-To access any Lovi API endpoint, you first need to authenticate by sending a POST request to the authentication endpoint with your email and password. In response, you'll receive a personal access token.
+To access any Lovi API endpoint, you must first authenticate and obtain an access token using your email and password. This token must then be included in the `Authorization` header of all subsequents requests. 
 
 Token Rotation: We recommend periodically rotating tokens and storing them securely.
 
@@ -18,33 +18,61 @@ Authentication Endpoint
 ```
 POST https://cloud.lovi.ai/auth/v1/token?grant_type=password
 ```
+Query Parameters:
 
-Headers
+| Parameter     | Required | Fixed Value | Description                                             |
+|---------------|----------|-------------|---------------------------------------------------------|
+| `grant_type`  | Yes      | `password`  | Indicates that you're using authentication via email and password. |
 
-```
+**Request Headers**
+
+Inform the server of the type of content you are sending:
+
+```json
 {
   "Content-Type": "application/json"
 }
 ```
 
-Body
+| Header         | Value               | Description                                           |
+|----------------|---------------------|-------------------------------------------------------|
+| `Content-Type` | `application/json`  | Indicates that the request body is in JSON format.   |
 
-```
+
+**Request Body**
+
+This is where you provide your personal credentials (your email and password):
+
+```json
 {
   "email": "your-email@example.com",
   "password": "your-secure-password"
 }
 ```
 
-Response
+You should replace:
 
-```
+* "your-email@example.com" with your actual email address.
+* "your-secure-password" with your password.
+
+**Response**
+
+The server will respond with a token that you will need to authenticate in future API calls.
+
+```json
 {
   "access_token": "your-personal-access-token",
   "token_type": "bearer",
   "expires_in": 3600
 }
 ```
+
+| Field Name       | Description                                                                                           | Example                               | Common Value    |
+|------------------|-------------------------------------------------------------------------------------------------------|---------------------------------------|-----------------|
+| `access_token`   | The personal access token you receive after authenticating successfully. This token allows you to make authenticated requests to the API endpoints. | `"your-personal-access-token"`        | (Your token)    |
+| `token_type`     | The type of the access token. In this case, the value is `"bearer"`, which means it is a **Bearer token**. Bearer tokens are commonly used in OAuth2 authentication. | `"bearer"`                            | `"bearer"`      |
+| `expires_in`     | The expiration time of the access token, in seconds. After this time, the token will expire and you'll need to obtain a new one. | `3600` (which equals 1 hour)         | (Duration in seconds) |
+
 
 <Warning>
   Save this token — you'll use it to interact with the rest of the API.
@@ -54,13 +82,13 @@ Response
 
 ### 🧭 Retrieve Company API Keys
 
-Endpoint
+**Endpoint**
 
 ```
 POST https://cloud.lovi.ai/functions/v1/api_keys
 ```
 
-Headers
+**Headers**
 
 ```
 {
@@ -68,7 +96,17 @@ Headers
 }
 ```
 
-Response
+| Parameter       | Description                                                                                       | Example                                    | Required |
+|-----------------|---------------------------------------------------------------------------------------------------|--------------------------------------------|----------|
+| **Authorization** | This header is used for authenticating the request. It contains a Bearer token that you receive after logging in. This token ensures that only authenticated users can access the API. | `"Bearer your-personal-access-token"`       | Yes      |
+
+
+**Response**
+
+The response to the request for retrieving the company’s API keys is a JSON object containing two key pieces of information:
+
+* **company_id**: A unique identifier for the company. It distinguishes the company from others in the system.
+* **access_key**: The API access key associated with the company. This key is required for authenticating and authorizing future API requests to interact with the company's resources.
 
 ```
 [
@@ -78,8 +116,9 @@ Response
   }
 ]
 ```
+Use the `access_key` provided in the response to authenticate future requests and perform operations on behalf of the specified company.
 
-📝 Each company will have a unique access key. You must use the correct key depending on which company you're interacting with.
+📝Each company will have a unique access key. You must use the correct key depending on which company you're interacting with.
 
 <hr />
 
@@ -93,23 +132,58 @@ You will use the previously retrieved `access_key` in your query parameters or h
 
 ### 📣 Send Notification
 
+To send a notification via the Lovi API, make a POST request to the endpoint with the necessary parameters and authentication. 
+
 Endpoint
 
 ```
 POST https://cloud.lovi.ai/functions/v1/notify?access_key=your-access-key&unflatten=true
 ```
+Query Parameters
 
-Headers
+| Parameter    | Required | Description                                                                 |
+|--------------|----------|-----------------------------------------------------------------------------|
+| `access_key` | Yes      | Your unique API access key.                                                  |
+| `unflatten`  | No       | If set to `true`, the body must contain flat variables (no nested objects). If set to `false` or omitted, the body can contain nested objects. |
 
+When `unflatten=true`, the body must be flat, meaning no nested objects are allowed. In this case, the request would look like:
+
+```json
+{
+  "components_push.body_text_0": "{{name}}",
+  "components_push.body_text_1": "Technical in Nursing Care Assistance",
+  "contact.number": "34666033135",
+  "contact.name": "User name"
+}
 ```
+When `unflatten=false` (or omitted), you can send nested objects. The request would look like this:
+
+```json
+{
+  "components_push": {
+    "body_text_0": "{{name}}",
+    "body_text_1": "Technical in Nursing Care Assistance"
+  },
+  "contact": {
+    "number": "34666033135",
+    "name": "User name"
+  }
+}
+```
+**Headers**
+
+```json
 {
   "apikey": "your-api-key"
 }
 ```
+The `apikey`header should contain your API key, which is necessary for authentication and access to the API. 
 
-Body
+**Body Request**
 
-```
+The body of the request contains the notification details. Here are the components:
+
+```json
 {
   "components_push.body_text_0": "{{name}}",
   "components_push.body_text_1": "Technical in Nursing Care Assistance",
@@ -122,99 +196,57 @@ Body
   "campaign_name": "Example Campaign"
 }
 ```
+Parameters:
 
-- components_push.body_text_0: Where the recipient's name or other dynamic data will be inserted.
-- components_push.body_text_1: Predefined text included in the notification.
-- contact.number: The recipient's phone number.
-- contact.name: The recipient's name.
-- language_template: e.g., `es_ES` for Spanish.
-- name_template: Name of the approved WhatsApp template.
-- recipient_id: Unique identifier for the recipient.
-- notification_type: Like "marketing".
-- campaign_name: Name of the campaign.
+| Parameter                     | Description                                                                   |
+|-------------------------------|-------------------------------------------------------------------------------|
+| `components_push.body_text_0`  | Where the recipient's name or other dynamic data will be inserted.            |
+| `components_push.body_text_1`  | Predefined text included in the notification.                                 |
+| `contact.number`               | The recipient's phone number.                                                 |
+| `contact.name`                 | The recipient's name.                                                        |
+| `language_template`            | The language for the notification template. E.g., `es_ES` for Spanish.        |
+| `name_template`                | The name of the approved WhatsApp template to use.                            |
+| `recipient_id`                 | A unique identifier for the recipient.                                        |
+| `notification_type`            | The type of notification, such as "marketing".                                |
+| `campaign_name`                | The name of the campaign sending the notification.                            |
 
-<hr />
+**Important Notes**
 
-### 🔊 Upload Audio
+* **Flattened vs Nested Objects**:
+  * When `unflatten=true`, all data must be flattened (no nested objects).
+  * When `unflatten=false`, you can send nested objects as shown in the second example.
 
-POST to:
+* **Media Attachments**:
 
-```
-https://cloud.lovi.ai/functions/v1/voice/upload
-```
+Currently, the API only supports sending links for media (images, documents, and videos). You cannot directly upload media files, but you can include URLs to media hosted externally.
 
-Form Data
+Example of sending a media link:
 
-| Field      | Type | Description          |
-| ---------- | ---- | -------------------- |
-| session_id | text | Unique session ID    |
-| audio      | file | Audio file to upload |
-
-<hr />
-
-### 🧑‍💼 Invite/Reinvite User
-
-Reinvite
-
-```
-POST https://cloud.lovi.ai/functions/v1/users/reinvite
-```
-
-Invite
-
-```
-POST https://d975-46-27-0-124.ngrok-free.app/functions/v1/users/invite
-```
-
-Body
-
-```
+```json 
 {
-  "email": "user@example.com",
-  "name_companie": "ExampleCompany"
+  "components_push.body_text_0": "Check out this image!",
+  "media_url": "https://example.com/media/image.jpg"
 }
 ```
 
-<hr />
-
-### 🏢 Create New Company
-
-Endpoint
-
-```
-POST https://cloud.lovi.ai/functions/v1/newcustomer
-```
-
-Headers
-
-```
-{
-  "Authorization": "Bearer your-personal-access-token"
-}
-```
-
-Body
-
-```
-{
-  "companie": "ExampleCompany",
-  "email": "user@example.com"
-}
-```
 
 <hr />
 
 ### 📥 Upload WhatsApp Template
 
-Endpoint
+To upload a new WhatsApp template, send a POST request to the following endpoint with the necessary parameters in the request body.
+
+**Endpoint**
 
 ```
 POST https://vditxnjbejitzkcfqzzv.supabase.co/functions/v1/admin/whatsapp/create/template
 ```
 
-Body
+**Request Body**
 
-```
+The body of the request should include the following JSON structure:
+
+```json
 {
   "company_id": "e17f3b7d-28ef-4d34-896d-ca5e11e5361c",
   "waba_id": "511841218687554",
@@ -257,6 +289,30 @@ Body
 }
 ```
 
+**Parameters Explanation**
+
+| Parameter                            | Description                                                                 |
+|--------------------------------------|-----------------------------------------------------------------------------|
+| `company_id`                         | **Required**. The unique identifier for your company.                       |
+| `waba_id`                            | **Required**. Your WhatsApp Business Account (WABA) ID.                    |
+| `name_template`                      | **Required**. The name of the template you are uploading.                  |
+| `language_template`                  | **Required**. The language code for the template, e.g., `en_US` for English. |
+| `category_template`                  | **Required**. The category of the template. Valid options: `MARKETING`, `TRANSACTIONAL`, `OTP`. |
+| `components_template.BODY.text`      | **Required**. The main text that will appear in the WhatsApp message body. |
+| `components_template.BUTTONS`        | **Required**. A list of buttons to include in the message. There are two types of buttons: |
+| `components_template.BUTTONS.type`   | The type of button: `QUICK_REPLY` or `URL`.                                 |
+| `components_template.BUTTONS.text`   | **Required** for both button types. The text displayed on the button.      |
+| `components_template.BUTTONS.url`    | **Optional** (only for `URL` type). The link the button should direct to.  |
+
+**Button Types**
+
+* QUICK_REPLY: A button that, when clicked, sends a predefined response.
+* URL: A button that, when clicked, redirects the user to a URL. 
+
+**Response**
+The response will confirm if the template was succesfully uploaded or if there were any issues. 
+
+
 <hr />
 
 ### 📚 Tips for Development
@@ -265,16 +321,8 @@ Body
 - Use `apikey` or `Authorization: Bearer` in headers depending on endpoint security.
 - For endpoints that deal with voice or widgets, `session_id` is crucial.
 - Store and handle tokens securely.
+- **Prior validations**: Validate data before sending it to the API to avoid errors.
+- **Testing**: Test in a devolopment environment before implementing in production.
+- **Permission control**: Limit token generation to users with administrator permissions. 
 
 <hr />
-
-### ✅ Status and Monitoring
-
-- `GET /functions/v1/web/status_chat` → Check chat status
-- `GET /functions/v1/widget` → Get web widget configuration
-
-✍️ This documentation is auto-generated based on Postman collection for Botslovers & LOVI ecosystem. For any questions, contact your API administrator.
-
-📎 Resources
-
-- Postman Collection Viewer
