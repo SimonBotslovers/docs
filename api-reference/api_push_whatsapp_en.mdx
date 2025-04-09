@@ -28,8 +28,6 @@ POST https://cloud.lovi.ai/auth/v1/token?
 
 Inform the server of the type of content you are sending:
 
-
-
 | Key        | Value               | Description                                           |
 |----------------|---------------------|-------------------------------------------------------|
 | `Content-Type` | `application/json`  | Indicates that the request body is in JSON format.   |
@@ -108,7 +106,6 @@ The server will respond with a token that you will need to authenticate in futur
 
 ⚠️ Save your `access_token` — you'll use it to interact with the rest of the API.
 
-<hr />
 
 ### 🧭 Retrieve Company API Keys
 
@@ -151,7 +148,6 @@ Once you identify which company you want to work with, you must authenticate aga
 
 You will use the previously retrieved `access_key` in your query parameters or headers, depending on the endpoint.
 
-<hr />
 
 ### 📣 Send Notification
 
@@ -216,7 +212,7 @@ The body of the request contains the notification details. Here are the componen
 }
 ```
 
-<br>
+
 
 > ⚠️ **Media Attachments**:
 >
@@ -243,7 +239,7 @@ When the request is successful, the response will contain the following message:
   "message": "Registration successful"
 }
 ```
-<hr />
+
 
 ### Create Template
 
@@ -346,7 +342,7 @@ In this response, you can check the status to know the progress of the template 
 This error response highlights that the name_template must be written in lowercase and without spaces, only allowing underscores. Ensure that your template name follows this format to avoid errors.
 
 
-<hr />
+
 
 ### Call Templates Components
 
@@ -369,7 +365,6 @@ GET https://cloud.lovi.ai/functions/v1/notify/template/components?
 
 The response will contain the components of the template, such as button types, text content, etc. 
 
-<hr />
 
 ### 📥 Example of Incoming WhatsApp Webhook Simulation
 
@@ -426,7 +421,6 @@ Here's an example:
   ]
 }
 ```
-<hr />
 
 ### 📚 Tips for Development
 
@@ -438,4 +432,3 @@ Here's an example:
 - **Testing**: Test in a devolopment environment before implementing in production.
 - **Permission control**: Limit token generation to users with administrator permissions. 
 
-<hr />
