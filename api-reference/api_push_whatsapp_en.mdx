@@ -16,9 +16,9 @@ Token Rotation: We recommend periodically rotating tokens and storing them secur
 Authentication Endpoint
 
 ```
-POST https://cloud.lovi.ai/auth/v1/token?grant_type=password
+POST https://cloud.lovi.ai/auth/v1/token?
 ```
-Query Parameters:
+**Query Parameters**
 
 | Parameter     | Required | Fixed Value | Description                                             |
 |---------------|----------|-------------|---------------------------------------------------------|
@@ -28,13 +28,9 @@ Query Parameters:
 
 Inform the server of the type of content you are sending:
 
-```json
-{
-  "Content-Type": "application/json"
-}
-```
 
-| Header         | Value               | Description                                           |
+
+| Key        | Value               | Description                                           |
 |----------------|---------------------|-------------------------------------------------------|
 | `Content-Type` | `application/json`  | Indicates that the request body is in JSON format.   |
 
@@ -57,26 +53,60 @@ You should replace:
 
 **Response**
 
-The server will respond with a token that you will need to authenticate in future API calls.
+The server will respond with a token that you will need to authenticate in future API calls. The response will look like this:
 
 ```json
 {
-  "access_token": "your-personal-access-token",
-  "token_type": "bearer",
-  "expires_in": 3600
+    "access_token": "your-access-token",
+    "token_type": "bearer",
+    "expires_in": 3600,
+    "expires_at": 1744196340,
+    "refresh_token": "bNYf6m7S7dFjfHCFTob2zg",
+    "user": {
+        "id": "3b601fa8-49fd-4a8c-af8c-b30601410975",
+        "aud": "authenticated",
+        "role": "authenticated",
+        "email": "your-email@example.com",
+        "email_confirmed_at": "2025-01-16T18:45:09.995114Z",
+        "phone": "",
+        "confirmed_at": "2025-01-16T18:45:09.995114Z",
+        "last_sign_in_at": "2025-04-09T09:59:00.18987884Z",
+        "app_metadata": {
+            "provider": "email",
+            "providers": [
+                "email"
+            ]
+        },
+        "user_metadata": {
+            "email_verified": true,
+            "name": "Your-Company"
+        },
+        "identities": [
+            {
+                "identity_id": "23b66c68-ce37-4483-8470-67e08e21a61e",
+                "id": "3b601fa8-49fd-4a8c-af8c-b30601410975",
+                "user_id": "3b601fa8-49fd-4a8c-af8c-b30601410975",
+                "identity_data": {
+                    "email": "your-email@example.com",
+                    "email_verified": false,
+                    "phone_verified": false,
+                    "sub": "3b601fa8-49fd-4a8c-af8c-b30601410975"
+                },
+                "provider": "email",
+                "last_sign_in_at": "2025-01-16T18:45:09.985377Z",
+                "created_at": "2025-01-16T18:45:09.985932Z",
+                "updated_at": "2025-01-16T18:45:09.985932Z",
+                "email": "your-email@example.com"
+            }
+        ],
+        "created_at": "2025-01-16T18:45:09.956743Z",
+        "updated_at": "2025-04-09T09:59:00.192243Z",
+        "is_anonymous": false
+    }
 }
 ```
 
-| Field Name       | Description                                                                                           | Example                               | Common Value    |
-|------------------|-------------------------------------------------------------------------------------------------------|---------------------------------------|-----------------|
-| `access_token`   | The personal access token you receive after authenticating successfully. This token allows you to make authenticated requests to the API endpoints. | `"your-personal-access-token"`        | (Your token)    |
-| `token_type`     | The type of the access token. In this case, the value is `"bearer"`, which means it is a **Bearer token**. Bearer tokens are commonly used in OAuth2 authentication. | `"bearer"`                            | `"bearer"`      |
-| `expires_in`     | The expiration time of the access token, in seconds. After this time, the token will expire and you'll need to obtain a new one. | `3600` (which equals 1 hour)         | (Duration in seconds) |
-
-
-<Warning>
-  Save this token — you'll use it to interact with the rest of the API.
-</Warning>
+⚠️ Save your `access_token` — you'll use it to interact with the rest of the API.
 
 <hr />
 
@@ -89,29 +119,22 @@ POST https://cloud.lovi.ai/functions/v1/api_keys
 ```
 
 **Headers**
-
-```
-{
-  "Authorization": "Bearer your-personal-access-token"
-}
-```
-
-| Parameter       | Description                                                                                       | Example                                    | Required |
-|-----------------|---------------------------------------------------------------------------------------------------|--------------------------------------------|----------|
-| **Authorization** | This header is used for authenticating the request. It contains a Bearer token that you receive after logging in. This token ensures that only authenticated users can access the API. | `"Bearer your-personal-access-token"`       | Yes      |
+| **Parameter**     | **Example**                          | **Required** | **Description**                                                                                                     |
+|-------------------|--------------------------------------|--------------|---------------------------------------------------------------------------------------------------------------------|
+| Authorization | Bearer your-access-token| Yes          | This header is used for authenticating the request. It contains a Bearer token received after logging in.           |
 
 
 **Response**
 
 The response to the request for retrieving the company’s API keys is a JSON object containing two key pieces of information:
 
-* **company_id**: A unique identifier for the company. It distinguishes the company from others in the system.
+* **name_companie**: The name of the company. It distinguishes the company from others in the system.
 * **access_key**: The API access key associated with the company. This key is required for authenticating and authorizing future API requests to interact with the company's resources.
 
-```
+```json
 [
   {
-    "company_id": "example-company-id",
+    "name_companie": "example-company-name",
     "access_key": "example-access-key"
   }
 ]
@@ -120,7 +143,7 @@ Use the `access_key` provided in the response to authenticate future requests an
 
 📝Each company will have a unique access key. You must use the correct key depending on which company you're interacting with.
 
-<hr />
+
 
 ### 🔁 Token per Company
 
@@ -134,186 +157,280 @@ You will use the previously retrieved `access_key` in your query parameters or h
 
 To send a notification via the Lovi API, make a POST request to the endpoint with the necessary parameters and authentication. 
 
-Endpoint
+**Endpoint**
 
 ```
-POST https://cloud.lovi.ai/functions/v1/notify?access_key=your-access-key&unflatten=true
+POST https://cloud.lovi.ai/functions/v1/notify?
 ```
-Query Parameters
+**Query Parameters**
 
 | Parameter    | Required | Description                                                                 |
 |--------------|----------|-----------------------------------------------------------------------------|
 | `access_key` | Yes      | Your unique API access key.                                                  |
 | `unflatten`  | No       | If set to `true`, the body must contain flat variables (no nested objects). If set to `false` or omitted, the body can contain nested objects. |
 
-When `unflatten=true`, the body must be flat, meaning no nested objects are allowed. In this case, the request would look like:
+When `unflatten=true`, the body must be flat, meaning no nested objects are allowed. 
 
-```json
-{
-  "components_push.body_text_0": "{{name}}",
-  "components_push.body_text_1": "Technical in Nursing Care Assistance",
-  "contact.number": "34666033135",
-  "contact.name": "User name"
-}
-```
-When `unflatten=false` (or omitted), you can send nested objects. The request would look like this:
 
-```json
-{
-  "components_push": {
-    "body_text_0": "{{name}}",
-    "body_text_1": "Technical in Nursing Care Assistance"
-  },
-  "contact": {
-    "number": "34666033135",
-    "name": "User name"
-  }
-}
-```
 **Headers**
 
-```json
-{
-  "apikey": "your-api-key"
-}
-```
-The `apikey`header should contain your API key, which is necessary for authentication and access to the API. 
+| Key     | Value         |
+|---------|---------------|
+| apikey  | your-api-key  |
+
+
+The `apikey` header should contain your API key, which is necessary for authentication and access to the API. 
 
 **Body Request**
 
 The body of the request contains the notification details. Here are the components:
 
+| Parameter                   | Description                                                                                 |
+|-----------------------------|---------------------------------------------------------------------------------------------|
+| `components_push.body_text_0` | Dynamic body text of the message. `{{name}}` will be replaced with the value of `contact.name` (e.g., "John Doe"). |
+| `components_push.body_text_1` | Static body text of the message. In this case, it shows the name of the course or service (e.g., "Técnico en Cuidados Auxiliares de Enfermería").  |
+| `contact.number`             | Phone number of the contact who will receive the message (international format, no `+`). Example: `34666033135`. |
+| `contact.name`               | Name of the contact. This value will replace `{{name}}` in the message. Example: `John Doe`.              |
+| `language_template`          | Language code for the template (e.g., `es_ES` for Spanish).                                |
+| `name_template`              | Name of the template that will be used for the message (e.g., `fppro_enfermeria`).                                    |
+| `recipient_id`               | ID or phone number of the recipient who will receive the notification. Example: `34919469323`.                     |
+| `notification_type`          | Type of notification.  |
+| `campaign_name`              | Name of the campaign this notification belongs to (e.g., "Prueba Webservice").                                         |
+
+### Example:
 ```json
 {
-  "components_push.body_text_0": "{{name}}",
-  "components_push.body_text_1": "Technical in Nursing Care Assistance",
-  "contact.number": "34666033135",
-  "contact.name": "User name",
-  "language_template": "en_US",
-  "name_template": "campaignID",
-  "recipient_id": "1234",
+  "components_push": {
+    "body_text_0": "{{name}}",
+    "body_text_1": "Técnico en Cuidados Auxiliares de Enfermería"
+  },
+  "contact": {
+    "number": "34666033135",
+    "name": "Jierson"
+  },
+  "language_template": "es_ES",
+  "name_template": "fppro_enfermeria",
+  "recipient_id": "34919469323",
   "notification_type": "marketing",
-  "campaign_name": "Example Campaign"
+  "campaign_name": "Prueba Webservice"
 }
 ```
-Parameters:
 
-| Parameter                     | Description                                                                   |
-|-------------------------------|-------------------------------------------------------------------------------|
-| `components_push.body_text_0`  | Where the recipient's name or other dynamic data will be inserted.            |
-| `components_push.body_text_1`  | Predefined text included in the notification.                                 |
-| `contact.number`               | The recipient's phone number.                                                 |
-| `contact.name`                 | The recipient's name.                                                        |
-| `language_template`            | The language for the notification template. E.g., `es_ES` for Spanish.        |
-| `name_template`                | The name of the approved WhatsApp template to use.                            |
-| `recipient_id`                 | A unique identifier for the recipient.                                        |
-| `notification_type`            | The type of notification, such as "marketing".                                |
-| `campaign_name`                | The name of the campaign sending the notification.                            |
+<br>
 
-**Important Notes**
+> ⚠️ **Media Attachments**:
+>
+> 
+>Currently, the API only supports sending links for media (images, documents, and videos). You cannot directly upload media files, but you can include URLs to media hosted externally.
+>
+>Example of sending a media link:
+>
+>
+>```json 
+>{
+>  "components_push.body_text_0": "Check out this image!",
+>  "media_url": "https://example.com/media/image.jpg"
+>}
+>```
 
-* **Flattened vs Nested Objects**:
-  * When `unflatten=true`, all data must be flattened (no nested objects).
-  * When `unflatten=false`, you can send nested objects as shown in the second example.
 
-* **Media Attachments**:
+**Response**
 
-Currently, the API only supports sending links for media (images, documents, and videos). You cannot directly upload media files, but you can include URLs to media hosted externally.
+When the request is successful, the response will contain the following message:
 
-Example of sending a media link:
-
-```json 
+```json
 {
-  "components_push.body_text_0": "Check out this image!",
-  "media_url": "https://example.com/media/image.jpg"
+  "message": "Registration successful"
 }
 ```
+---
 
+### Create Template
 
-<hr />
-
-### 📥 Upload WhatsApp Template
-
-To upload a new WhatsApp template, send a POST request to the following endpoint with the necessary parameters in the request body.
+This API allows you to create a WhatsApp message template that may include buttons for user interaction.
 
 **Endpoint**
 
 ```
 POST https://vditxnjbejitzkcfqzzv.supabase.co/functions/v1/admin/whatsapp/create/template
 ```
+**Request body**
 
-**Request Body**
+This JSON represents a template creation request for WhatsApp Business API. It defines the structure of the template, including its name, language, category, and the content that the template will contain. The key components are as follows:
 
-The body of the request should include the following JSON structure:
+* **company_id**: The unique identifier for the company requesting the template.
+
+* **waba_id**: The ID of the WhatsApp Business Account associated with the request.
+
+* **name_template**: The name of the template, which must be in lowercase with underscores.
+
+* **language_template**: Specifies the language of the template (e.g., en_US for English).
+
+* **category_template**: The category under which the template falls (e.g., MARKETING).
+
+* **components_template**: This includes the message body and buttons.
+
+* **BODY**: Defines the body text of the message to be sent.
+
+* **BUTTONS**: Specifies the interactive buttons that can be included, such as Quick Reply and URL buttons. The Quick Reply Buttons allow users to select predefined responses within WhatsApp, facilitating quick interactions. In contrast, URL Buttons redirect users to an external website when clicked. The main difference is that quick replies trigger a response within WhatsApp, while URL buttons open an external link.
+
+> ⚠️ **Attention: Remember that `name_template` must be in lowercase, and spaces are not allowed
+
+Here's an example:
 
 ```json
 {
-  "company_id": "e17f3b7d-28ef-4d34-896d-ca5e11e5361c",
-  "waba_id": "511841218687554",
-  "name_template": "andy botoness",
-  "language_template": "en_US",
-  "category_template": "MARKETING",
-  "components_template": {
-    "BODY": {
-      "text": "This is a test message to show the buttons that can be created in a WhatsApp message."
-    },
-    "BUTTONS": [
-      {
-        "type": "QUICK_REPLY",
-        "text": "Chat with an agent"
-      },
-      {
-        "type": "QUICK_REPLY",
-        "text": "What do you do?"
-      },
-      {
-        "type": "QUICK_REPLY",
-        "text": "I want to buy"
-      },
-      {
-        "type": "QUICK_REPLY",
-        "text": "I want to sell"
-      },
-      {
-        "type": "URL",
-        "url": "https://www.example.com",
-        "text": "Visit Website"
-      },
-      {
-        "type": "URL",
-        "url": "https://www.example2.com",
-        "text": "See what we do"
-      }
-    ]
-  }
+    "company_id": "e17f3b7d-28ef-4d34-896d-ca5e11e5361c",   
+    "waba_id": "511841218687554",  // The WhatsApp Business Account ID.
+    "name_template": "andy_test",  
+    "language_template": "en_US",    
+    "category_template": "MARKETING",  
+    "components_template": {
+        "BODY": {
+            "text": "The following message is a test message to see the buttons that can be created in a WhatsApp message."  
+        },
+        "BUTTONS": [
+            {
+                "type": "QUICK_REPLY",  
+                "text": "Talk to an agent" 
+            },
+            {
+                "type": "QUICK_REPLY",
+                "text": "What do you do?"
+            },
+            {
+                "type": "QUICK_REPLY",
+                "text": "I want to buy"
+            },
+            {
+                "type": "QUICK_REPLY",
+                "text": "I want to sell"
+            },
+            {
+                "type": "URL",  
+                "url": "https://www.botslovers.com",  
+                "text": "Visit Website"
+            },
+            {
+                "type": "URL",
+                "url": "https://www.lovi.ai",
+                "text": "See what we do"
+            }
+        ]
+    }
 }
 ```
 
-**Parameters Explanation**
-
-| Parameter                            | Description                                                                 |
-|--------------------------------------|-----------------------------------------------------------------------------|
-| `company_id`                         | **Required**. The unique identifier for your company.                       |
-| `waba_id`                            | **Required**. Your WhatsApp Business Account (WABA) ID.                    |
-| `name_template`                      | **Required**. The name of the template you are uploading.                  |
-| `language_template`                  | **Required**. The language code for the template, e.g., `en_US` for English. |
-| `category_template`                  | **Required**. The category of the template. Valid options: `MARKETING`, `TRANSACTIONAL`, `OTP`. |
-| `components_template.BODY.text`      | **Required**. The main text that will appear in the WhatsApp message body. |
-| `components_template.BUTTONS`        | **Required**. A list of buttons to include in the message. There are two types of buttons: |
-| `components_template.BUTTONS.type`   | The type of button: `QUICK_REPLY` or `URL`.                                 |
-| `components_template.BUTTONS.text`   | **Required** for both button types. The text displayed on the button.      |
-| `components_template.BUTTONS.url`    | **Optional** (only for `URL` type). The link the button should direct to.  |
-
-**Button Types**
-
-* QUICK_REPLY: A button that, when clicked, sends a predefined response.
-* URL: A button that, when clicked, redirects the user to a URL. 
-
 **Response**
-The response will confirm if the template was succesfully uploaded or if there were any issues. 
+
+When you successfully create a template, the system will return a response confirming the details of the template. Below is an example of a typical response:
+
+```json
+{
+    "id": "685317794061787",  
+    "status": "APPROVED",      
+    "category": "MARKETING",  
+    "name": "andy_test"  
+}
+```
+In this response, you can check the status to know the progress of the template creation, while the id serves as a unique reference to the template.
+
+⚠️ In case of an error during template creation, the response will provide a message detailing the issue. For example, if the name_template format is incorrect, you may receive an error message similar to the one below:
+
+```json
+{
+    "success": false,  
+    "message": "Error: Invalid parameter - OAuthException - name - Name Format is Incorrect - The message template name can only have lowercase letters and underscores. - AWbNxBSMADlXNkZsEGJQyWs"  
+}
+```
+This error response highlights that the name_template must be written in lowercase and without spaces, only allowing underscores. Ensure that your template name follows this format to avoid errors.
 
 
 <hr />
+
+### Call Templates Components
+
+This API request allows you to retrieve the components of a specific template in WhatsApp, such as buttons or message bodies. You can request the components of a template by specifying the **template ID** and an **access key**.
+
+**Endpoint**
+
+```
+GET https://cloud.lovi.ai/functions/v1/notify/template/components?
+```
+
+**Query Parameters**
+
+| **Parameter**   | **Required** | **Description**                                                                                         |
+|-----------------|--------------|---------------------------------------------------------------------------------------------------------|
+| `access_key`    | Yes          | The authentication key used to access the API. This is typically generated and provided by the service. |
+| `template`      | Yes          | The **template ID** for which you want to retrieve components (e.g., buttons, text, etc.).              |
+
+**Response**
+
+The response will contain the components of the template, such as button types, text content, etc. 
+<hr>
+
+### 📥 Example of Incoming WhatsApp Webhook Simulation
+
+This example shows how Meta sends data when a user sends a message via WhatsApp. You can use this structure to test your message-receiving endpoint.
+
+**Endpoint**
+
+```
+POST https://8146-46-27-0-124.ngrok-free.app/functions/v1/whatsapp
+```
+
+**Body Request**
+
+Here's an example:
+
+```json
+{
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "0",
+      "changes": [
+        {
+          "field": "messages",
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": {
+              "display_phone_number": "15550644416",
+              "phone_number_id": "107120895626414"
+            },
+            "contacts": [
+              {
+                "profile": {
+                  "name": "John Doe"
+                },
+                "wa_id": "34666033135"
+              }
+            ],
+            "messages": [
+              {
+                "from": "16315551181",
+                "id": "ABGGFlA5Fpa",
+                "timestamp": "1504902988",
+                "type": "text",
+                "text": {
+                  "body": "this is a text message"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+---
+
+
+
+
+
 
 ### 📚 Tips for Development
 
