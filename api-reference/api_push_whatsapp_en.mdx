@@ -3,11 +3,11 @@ title: "WhatsApp Notifications API"
 description: "Official documentation for interacting with Lovi's API via Postman"
 ---
 
-### Intro
+## Intro
 
 This manual describes in a practical way the methodology for connecting and accessing Lovi API services, allowing the sending of notifications via WhatsApp. Authentication is performed using tokens that enable basic authentication for the API services.
 
-### 🔑 Authentication
+## 🔑 Authentication
 
 To access any Lovi API endpoint, you must first authenticate and obtain an access token using your email and password. This token must then be included in the `Authorization` header of all subsequents requests. 
 
@@ -15,18 +15,18 @@ To access any Lovi API endpoint, you must first authenticate and obtain an acces
 
 > **Method**: POST  **Format**: JSON
 
-**Endpoint**
+### Endpoint
 
 ```
 POST https://cloud.lovi.ai/auth/v1/token
 ```
-**Query Parameters**
+### Query Parameters
 
 | Parameter     | Required | Fixed Value | Description                                             |
 |---------------|----------|-------------|---------------------------------------------------------|
 | `grant_type`  | Yes      | `password`  | Indicates that you're using authentication via email and password. |
 
-**Request Headers**
+### Request Headers
 
 Inform the server of the type of content you are sending:
 
@@ -37,7 +37,7 @@ Inform the server of the type of content you are sending:
 | `Content-Type` | `application/json`  | Indicates that the request body is in JSON format.   |
 
 
-**Request Body**
+### Request Body
 
 This is where you provide your personal credentials (your email and password):
 
@@ -53,7 +53,7 @@ You should replace:
 * "your-email@example.com" with your actual email address.
 * "your-secure-password" with your password.
 
-**Response**
+### Response
 
 The server will respond with a token that you will need to authenticate in future API calls. The response will look like this:
 
@@ -112,12 +112,12 @@ The server will respond with a token that you will need to authenticate in futur
 
 ---
 
-### 🧭 Retrieve Company API Keys
+## 🧭 Retrieve Company API Keys
 
 > **Method**: POST **Format**: JSON
 
 
-**Endpoint**
+### Endpoint
 
 ```
 POST https://cloud.lovi.ai/functions/v1/api_keys
@@ -129,7 +129,7 @@ POST https://cloud.lovi.ai/functions/v1/api_keys
 | Authorization | Bearer your-access-token| Yes          | This header is used for authenticating the request. It contains a Bearer token received after logging in.           |
 
 
-**Response**
+### Response
 
 Each object within the **`validApiKeys`** array represents an API key associated with a specific company. The fields included are:
 
@@ -172,18 +172,18 @@ You will use the previously retrieved `key` in your query parameters or headers,
 
 
 
-### 📣 Send Notification
+## 📣 Send Notification
 
 To send a notification via the Lovi API, make a POST request to the endpoint with the necessary parameters and authentication. 
 
 > **Method**: POST **Method**: JSON
 
-**Endpoint**
+### Endpoint
 
 ```
 POST https://cloud.lovi.ai/functions/v1/notify
 ```
-**Query Parameters**
+### Query Parameters
 
 | Parameter    | Required | Description                                                                 |
 |--------------|----------|-----------------------------------------------------------------------------|
@@ -192,8 +192,7 @@ POST https://cloud.lovi.ai/functions/v1/notify
 
 When `unflatten=true`, the body must be flat, meaning no nested objects are allowed. 
 
-
-**Headers**
+### Headers
 
 | Key                  | Value               | Required | Description                                                                                               |
 |----------------------|---------------------|----------|-----------------------------------------------------------------------------------------------------------|
@@ -202,7 +201,7 @@ When `unflatten=true`, the body must be flat, meaning no nested objects are allo
 
 The `apikey` header should contain your API key, which is necessary for authentication and access to the API. 
 
-**Body Request**
+### Body Request
 
 The body of the request contains the notification details. 
 
@@ -367,7 +366,7 @@ Example of sending a media link:
   "campaign_name": "Webservice Test"
 }
 ```
-**Response**
+### Response
 
 When the request is successful, the response will contain the following message:
 
@@ -377,7 +376,7 @@ When the request is successful, the response will contain the following message:
 }
 ```
 
-### 📚 Tips for Development
+## 📚 Tips for Development
 
 - Use `access_key` when available in query parameters.
 - Use `apikey` or `Authorization: Bearer` in headers depending on endpoint security.
