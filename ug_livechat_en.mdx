@@ -9,13 +9,15 @@ The **Livechat** is a dedicated space for agents to manually handle conversation
 
 There are two operating modes, configurable from the Live Chat preferences in the settings:
 
-1\. **Automatic Assignment**: As conversations are routed to agents, they are automatically assigned to those who meet the configured requirements (e.g., being online, not exceeding their chat capacity, and handling inquiries in English). These agent-specific criteria are defined during onboarding. Conversations that cannot be assigned due to agent unavailability are placed in a queue and assigned to an agent as soon as one becomes available or a new agent logs in. The process is entirely automated.
+1. **Automatic Assignment**: As conversations are routed to agents, they are automatically assigned to those who meet the configured requirements (e.g., being online, not exceeding their chat capacity, and handling inquiries in the _languages supported by the agent_). These agent-specific criteria are defined during onboarding. Conversations that cannot be assigned due to agent unavailability are placed in a queue and assigned to an agent as soon as one becomes available or a new agent logs in. The process is entirely automated.\
+\
+For the automatic assignment we use round robin, a logic that automatically assigns new conversations in a rotating order. This ensures that all available agents receive chats equally, preventing overload, improving team productivity, and guaranteeing a faster and more balanced customer support experience.
 
-2\. **No Automatic Assignment**: Conversations routed to agents remain in an “unassigned” state. Agents can access the queue and manually assign chats to themselves as needed.
+2. **No Automatic Assignment**: Conversations routed to agents remain in an “unassigned” state. Agents can access the queue and manually assign chats to themselves as needed.
 
 You can set up automatic assignment in the settings menu:
 
-<CardGroup cols={2}>
+<CardGroup cols="2">
   <Card title="Livechat preferences" icon="screwdriver-wrench" href="https://lovi.mintlify.app/ug_settings_en">
     Configure the Livechat as you wish
   </Card>
@@ -44,3 +46,8 @@ Currently, there are three main folders (**Assigned to me**, **Unassigned**, **A
 <Note>
   Remember, if automatic assignment is enabled, you don’t need to worry about the **Unassigned** folder, as these conversations will be automatically assigned.
 </Note>
+
+
+## Departments
+
+In the settings section of the platform, there is an area called “Departments.” Within this section, you can create as many departments as you need and assign specific agents to each one. Once your departments are set up, you’ll be able to build an agent handover flow. This flow allows you to ask users a series of questions to determine which department best fits their needs. Based on their answers, the conversation will be routed to the corresponding department and, therefore, to the agents assigned to it.
