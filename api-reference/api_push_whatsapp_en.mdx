@@ -11,12 +11,14 @@ This manual describes in a practical way the methodology for connecting and acce
 
 To access any Lovi API endpoint, you must first authenticate and obtain an access token using your email and password. This token must then be included in the `Authorization` header of all subsequents requests. 
 
-Token Rotation: We recommend periodically rotating tokens and storing them securely.
+**Token Rotation**: We recommend periodically rotating tokens and storing them securely.
 
-Authentication Endpoint
+> **Method**: POST  **Format**: JSON
+
+**Endpoint**
 
 ```
-POST https://cloud.lovi.ai/auth/v1/token?
+POST https://cloud.lovi.ai/auth/v1/token
 ```
 **Query Parameters**
 
@@ -27,6 +29,8 @@ POST https://cloud.lovi.ai/auth/v1/token?
 **Request Headers**
 
 Inform the server of the type of content you are sending:
+
+
 
 | Key        | Value               | Description                                           |
 |----------------|---------------------|-------------------------------------------------------|
@@ -107,7 +111,11 @@ The server will respond with a token that you will need to authenticate in futur
 ⚠️ Save your `access_token` — you'll use it to interact with the rest of the API.
 
 
+
 ### 🧭 Retrieve Company API Keys
+
+> **Method**: POST **Format**: JSON
+
 
 **Endpoint**
 
@@ -123,40 +131,57 @@ POST https://cloud.lovi.ai/functions/v1/api_keys
 
 **Response**
 
-The response to the request for retrieving the company’s API keys is a JSON object containing two key pieces of information:
+Each object within the **`validApiKeys`** array represents an API key associated with a specific company. The fields included are:
 
-* **name_companie**: The name of the company. It distinguishes the company from others in the system.
-* **access_key**: The API access key associated with the company. This key is required for authenticating and authorizing future API requests to interact with the company's resources.
+*   **`company_id`**: Unique identifier of the company that owns the API key.
+
+*   **`key`**: The API key itself, used to authenticate requests.
+
+*   **`is_active`**: Boolean value indicating whether the key is currently active (*true*) or inactive (*false*).
+
+*   **`last_used`**: Timestamp of the last time the key was used. If the key has never been used, the value will be *null*.
+
+*   **`company_name`**: Name of the company associated with the API key, useful for display in interfaces or logs.
+
+Here's an example:
 
 ```json
-[
-  {
-    "name_companie": "example-company-name",
-    "access_key": "example-access-key"
-  }
-]
+{
+    "validApiKeys": [
+        {
+            "company_id": "your_company_id",
+            "key": "your_key",
+            "is_active": true,
+            "last_used": null,
+            "company_name": "your_company_name"
+        }
+    ]
+}
 ```
-Use the `access_key` provided in the response to authenticate future requests and perform operations on behalf of the specified company.
+Use the `key` provided in the response to authenticate future requests and perform operations on behalf of the specified company.
 
 📝Each company will have a unique access key. You must use the correct key depending on which company you're interacting with.
 
 
 
-### 🔁 Token per Company
+#### 🔁 Token per Company
 
 Once you identify which company you want to work with, you must authenticate again to generate a company-level token. This is usually required for secured actions like sending notifications or uploading media.
 
-You will use the previously retrieved `access_key` in your query parameters or headers, depending on the endpoint.
+You will use the previously retrieved `key` in your query parameters or headers, depending on the endpoint.
+
 
 
 ### 📣 Send Notification
 
 To send a notification via the Lovi API, make a POST request to the endpoint with the necessary parameters and authentication. 
 
+> **Method**: POST **Method**: JSON
+
 **Endpoint**
 
 ```
-POST https://cloud.lovi.ai/functions/v1/notify?
+POST https://cloud.lovi.ai/functions/v1/notify
 ```
 **Query Parameters**
 
@@ -170,66 +195,178 @@ When `unflatten=true`, the body must be flat, meaning no nested objects are allo
 
 **Headers**
 
-| Key     | Value         |
-|---------|---------------|
-| apikey  | your-api-key  |
+| Key                  | Value               | Required | Description                                                                                               |
+|----------------------|---------------------|----------|-----------------------------------------------------------------------------------------------------------|
+| apikey               | your-api-key        | Yes      | Your unique API key for authentication.                                                                   |
 
 
 The `apikey` header should contain your API key, which is necessary for authentication and access to the API. 
 
 **Body Request**
 
-The body of the request contains the notification details. Here are the components:
+The body of the request contains the notification details. 
 
-| Parameter                   | Description                                                                                 |
-|-----------------------------|---------------------------------------------------------------------------------------------|
-| `components_push.body_text_0` | Dynamic body text of the message. `{{name}}` will be replaced with the value of `contact.name` (e.g., "John Doe"). |
-| `components_push.body_text_1` | Static body text of the message. In this case, it shows the name of the course or service (e.g., "Técnico en Cuidados Auxiliares de Enfermería").  |
-| `contact.number`             | Phone number of the contact who will receive the message (international format, no `+`). Example: `34666033135`. |
-| `contact.name`               | Name of the contact. This value will replace `{{name}}` in the message. Example: `John Doe`.              |
-| `language_template`          | Language code for the template (e.g., `es_ES` for Spanish).                                |
-| `name_template`              | Name of the template that will be used for the message (e.g., `fppro_enfermeria`).                                    |
-| `recipient_id`               | ID or phone number of the recipient who will receive the notification. Example: `34919469323`.                     |
-| `notification_type`          | Type of notification.  |
-| `campaign_name`              | Name of the campaign this notification belongs to (e.g., "Prueba Webservice").                                         |
+When `unflatten=false` or the parameter is omitted, you can use nested objects, as shown in the following example.
 
-Example:
 ```json
 {
   "components_push": {
-    "body_text_0": "{{name}}",
-    "body_text_1": "Técnico en Cuidados Auxiliares de Enfermería"
+    "position_type_number": "example"
   },
   "contact": {
-    "number": "34666033135",
-    "name": "Jierson"
+    "number": "34123123123",
+    "name": "John Doe"
   },
-  "language_template": "es_ES",
-  "name_template": "fppro_enfermeria",
-  "recipient_id": "34919469323",
+  "language_template": "en_US",
+  "name_template": "your_template",
+  "recipient_id": "34123123123",
   "notification_type": "marketing",
-  "campaign_name": "Prueba Webservice"
+  "campaign_name": "Webservice Test"
 }
 ```
 
+❗When `unflatten=true`, you must concatenate the main key with the subkey. This ensures the structure remains flat, and nested objects are not supported.
+
+Example with nested objects (not allowed when `unflatten=true`):
+
+```json
+{
+  "contact": {
+    "number": "34123123123",
+    "name": "John Doe"
+  },
+  "language_template": "en_US"
+}
+```
+Example with a flat structure (required when `unflatten=true`). Here the keys are concatenated (e.g., contact.number), which is the correct format when `unflatten=true`:
+```json
+{
+  "contact.number": "34123123123",
+  "contact.name": "John Doe",
+  "language_template": "en_US"
+}
+```
+
+| Parameter                     | Required | Description                                                                                                                                       |
+|-------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| `components_push`              | No       | **Optional**. The `components_push` parameter is not required by default, but it may be necessary depending on the template being used. It must follow the structure `components_push.{position}_{type}_{number}`. For more information, see below. |
+| `contact`                      | Yes      | The `contact` parameter is an object. For more information about its fields, see below.                                                   |
+| `language_template`            | Yes      | Language code for the template (e.g., `es_ES` for Spanish).                                                                                       |
+| `name_template`                | Yes      | Name of the template that will be used for the message (e.g., `your_template`).                                                                   |
+| `recipient_id`                 | Yes      | ID or phone number of the recipient who will receive the notification. Example: `34123123123`.                                                    |
+| `notification_type`            | Yes      | Type of notification. (e.g., `marketing`, `transactional`).                                                                                       |
+| `campaign_name`                | Yes      | Name of the campaign this notification belongs to (e.g., "Webservice Test").                                                                      |
+                                                                   |
+
+#### 🧩 Dynamic placeholders (`{{variable}}`)
+
+In your template text, you can use **placeholders** like `{{variable}}` to dynamically inject values when the message is sent.
+
+These placeholders will be replaced with the corresponding values provided in the request payload. The system will look for parameters that match the placeholder name — either from the `contact` object or from any other custom parameter.
+
+✅ Example:
+
+**Payload:**
+
+```json
+{
+  "contact.name": "Laura",
+  "contact.course": "Nursing Assistant Technician",
+  "components_push.body_text_0": "Hi {{name}}, your course {{course}} starts soon!"
+}
+```
+
+It would render this message: "Hi Laura, your course Nursing Assistant Technician starts soon!"
+
+📌Keep in mind:
+
+* The variable name inside `{{ }}` must match the key in the payload (flattened, if needed).
+* You can use as many placeholders as you need, depending on what your template allows.
+* This system allows for personalized messages at scale.
 
 
-> ⚠️ **Media Attachments**:
->
-> 
->Currently, the API only supports sending links for media (images, documents, and videos). You cannot directly upload media files, but you can include URLs to media hosted externally.
->
->Example of sending a media link:
->
->
->```json 
->{
->  "components_push.body_text_0": "Check out this image!",
->  "media_url": "https://example.com/media/image.jpg"
->}
->```
+
+#### `components_push` Parameter
+
+This parameter allows you to include dynamic content or media in your message template. It is not required by default, but it may be necessary depending on the template you are using.
+
+It must follow the following key structure:
+`components_push.{position}_{type}_{number}: "value"`
+
+Where:
+
+* `position` (required): Indicates the component's location within the template. Valid values are: `header`, `body`, `footer`, or `button`.
+
+* `type` (required): Describes the type of parameter, such as text, image, document, etc. The exact value depends on the component and how the template was defined.
+
+* `number` (required): An integer that indicates the parameter's position in the template.
+  
+* `value` (required): It must be type string or string, it contains the value of the parameter.
+
+The value assigned to this key will be the content to insert into the template (e.g., a text string, an image URL, or the name of an uploaded file).
+
+Possible values by field:
+
+| **Field (`position`)** | **Accepted `type` values**            |
+|------------------------|---------------------------------------|
+| `header`               | `text`, `document`, `image`, `video` |
+| `body`                 | `text`                                |
+| `footer`               | `text`                                |
+| `button`               | `url`, `payload`                      |
 
 
+Example
+```json
+{
+  "components_push.body_text_0": "Lorem Ipsum",
+  "components_push.header_image_1": "https://example.com/image.jpg"
+}
+```
+In this example:
+
+```body_text_0``` refers to the first dynamic text parameter in the body.
+
+```header_image_1``` refers to an image placed in the template’s header.
+
+
+#### `contact` Parameter
+
+The `contact` parameter is an object that contains all the details related to the recipient of the message. It is **mandatory** to include the `contact.number` field, as this is the phone number of the person who will receive the notification.
+
+However, the `contact` object can contain additional optional fields, such as the name of the contact, to further personalize the message.
+
+##### Required Fields in the `contact` Object:
+
+*   **`contact.number`** (String): The phone number of the contact. This field is required and should be in international format without the `+` symbol (e.g., `34123123123`).
+    
+
+##### Optional Fields in the `contact` Object:
+
+Here are some examples:
+
+*   **`contact.name`** (String): The name of the contact. 
+*   **`contact.address`** (String): The address of the contact.
+* You can include as much information as needed within the `contact` object, depending on the level of personalization required by the template.
+
+ ⚠️ **Media Attachments**:
+
+ Currently, the API only supports sending links for media (images, documents, and videos). You cannot directly upload media files, but you can include URLs to media hosted externally.
+
+Example of sending a media link:
+
+```json 
+{
+  "components_push.position_type_number": "example",
+  "media_url": "https://example.com/media/image.jpg",
+  "contact.number": "34123123123",
+  "contact.name": "John Doe",
+  "language_template": "en_US",
+  "name_template": "your_template",
+  "recipient_id": "34123123123",
+  "notification_type": "marketing",
+  "campaign_name": "Webservice Test"
+}
+```
 **Response**
 
 When the request is successful, the response will contain the following message:
@@ -237,188 +374,6 @@ When the request is successful, the response will contain the following message:
 ```json
 {
   "message": "Registration successful"
-}
-```
-
-
-### Create Template
-
-This API allows you to create a WhatsApp message template that may include buttons for user interaction.
-
-**Endpoint**
-
-```
-POST https://vditxnjbejitzkcfqzzv.supabase.co/functions/v1/admin/whatsapp/create/template
-```
-**Request body**
-
-This JSON represents a template creation request for WhatsApp Business API. It defines the structure of the template, including its name, language, category, and the content that the template will contain. The key components are as follows:
-
-* **company_id**: The unique identifier for the company requesting the template.
-
-* **waba_id**: The ID of the WhatsApp Business Account associated with the request.
-
-* **name_template**: The name of the template, which must be in lowercase with underscores.
-
-* **language_template**: Specifies the language of the template (e.g., en_US for English).
-
-* **category_template**: The category under which the template falls (e.g., MARKETING).
-
-* **components_template**: This includes the message body and buttons.
-
-* **BODY**: Defines the body text of the message to be sent.
-
-* **BUTTONS**: Specifies the interactive buttons that can be included, such as Quick Reply and URL buttons. The Quick Reply Buttons allow users to select predefined responses within WhatsApp, facilitating quick interactions. In contrast, URL Buttons redirect users to an external website when clicked. The main difference is that quick replies trigger a response within WhatsApp, while URL buttons open an external link.
-
-> ⚠️ **Attention: Remember that `name_template` must be in lowercase, and spaces are not allowed
-
-Here's an example:
-
-```json
-{
-    "company_id": "e17f3b7d-28ef-4d34-896d-ca5e11e5361c",   
-    "waba_id": "511841218687554",  // The WhatsApp Business Account ID.
-    "name_template": "andy_test",  
-    "language_template": "en_US",    
-    "category_template": "MARKETING",  
-    "components_template": {
-        "BODY": {
-            "text": "The following message is a test message to see the buttons that can be created in a WhatsApp message."  
-        },
-        "BUTTONS": [
-            {
-                "type": "QUICK_REPLY",  
-                "text": "Talk to an agent" 
-            },
-            {
-                "type": "QUICK_REPLY",
-                "text": "What do you do?"
-            },
-            {
-                "type": "QUICK_REPLY",
-                "text": "I want to buy"
-            },
-            {
-                "type": "QUICK_REPLY",
-                "text": "I want to sell"
-            },
-            {
-                "type": "URL",  
-                "url": "https://www.botslovers.com",  
-                "text": "Visit Website"
-            },
-            {
-                "type": "URL",
-                "url": "https://www.lovi.ai",
-                "text": "See what we do"
-            }
-        ]
-    }
-}
-```
-
-**Response**
-
-When you successfully create a template, the system will return a response confirming the details of the template. Below is an example of a typical response:
-
-```json
-{
-    "id": "685317794061787",  
-    "status": "APPROVED",      
-    "category": "MARKETING",  
-    "name": "andy_test"  
-}
-```
-In this response, you can check the status to know the progress of the template creation, while the id serves as a unique reference to the template.
-
-⚠️ In case of an error during template creation, the response will provide a message detailing the issue. For example, if the name_template format is incorrect, you may receive an error message similar to the one below:
-
-```json
-{
-    "success": false,  
-    "message": "Error: Invalid parameter - OAuthException - name - Name Format is Incorrect - The message template name can only have lowercase letters and underscores. - AWbNxBSMADlXNkZsEGJQyWs"  
-}
-```
-This error response highlights that the name_template must be written in lowercase and without spaces, only allowing underscores. Ensure that your template name follows this format to avoid errors.
-
-
-
-
-### Call Templates Components
-
-This API request allows you to retrieve the components of a specific template in WhatsApp, such as buttons or message bodies. You can request the components of a template by specifying the **template ID** and an **access key**.
-
-**Endpoint**
-
-```
-GET https://cloud.lovi.ai/functions/v1/notify/template/components?
-```
-
-**Query Parameters** 
-
-| **Parameter**   | **Required** | **Description**                                                                                         |
-|-----------------|--------------|---------------------------------------------------------------------------------------------------------|
-| `access_key`    | Yes          | The authentication key used to access the API. This is typically generated and provided by the service. |
-| `template`      | Yes          | The **template ID** for which you want to retrieve components (e.g., buttons, text, etc.).              |
-
-**Response**
-
-The response will contain the components of the template, such as button types, text content, etc. 
-
-
-### 📥 Example of Incoming WhatsApp Webhook Simulation
-
-This example shows how Meta sends data when a user sends a message via WhatsApp. You can use this structure to test your message-receiving endpoint.
-
-**Endpoint**
-
-```
-POST https://8146-46-27-0-124.ngrok-free.app/functions/v1/whatsapp
-```
-
-**Body Request**
-
-Here's an example:
-
-```json
-{
-  "object": "whatsapp_business_account",
-  "entry": [
-    {
-      "id": "0",
-      "changes": [
-        {
-          "field": "messages",
-          "value": {
-            "messaging_product": "whatsapp",
-            "metadata": {
-              "display_phone_number": "15550644416",
-              "phone_number_id": "107120895626414"
-            },
-            "contacts": [
-              {
-                "profile": {
-                  "name": "John Doe"
-                },
-                "wa_id": "34666033135"
-              }
-            ],
-            "messages": [
-              {
-                "from": "16315551181",
-                "id": "ABGGFlA5Fpa",
-                "timestamp": "1504902988",
-                "type": "text",
-                "text": {
-                  "body": "this is a text message"
-                }
-              }
-            ]
-          }
-        }
-      ]
-    }
-  ]
 }
 ```
 
