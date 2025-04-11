@@ -68,7 +68,8 @@
     {
       "group": "API Documentation",
       "pages": [
-        "api-reference/api_push_whatsapp_en"
+        "api-reference/authentication",
+        "api-reference/api_push_whatsapp_en",
       ]
     }
   ],
