@@ -259,35 +259,50 @@ Example with a flat structure (required when `unflatten=true`). Here the keys ar
 
 #### 🧩 Dynamic placeholders (`{{variable}}`)
 
-In your template text, you can use **placeholders** like `{{variable}}` to dynamically inject values when the message is sent.
+In your template text, you can use placeholders like `{{variable}}` to dynamically inject a value when the message is sent.
 
-These placeholders will be replaced with the corresponding values provided in the request payload. The system will look for parameters that match the placeholder name — either from the `contact` object or from any other custom parameter.
+These placeholders will be replaced with the corresponding value provided in the payload. The system expects only one type of input per message: either a variable or static text — you cannot mix both. The system will look for parameters that match the placeholder name — either from the `contact` object or from any other custom parameter.
+
+Additionally, you can only use one variable per message — using multiple variables in the same field is not allowed.
 
 ✅ Example:
-
-**Payload:**
 
 ```json
 {
   "contact.name": "Laura",
   "contact.course": "Nursing Assistant Technician",
-  "components_push.body_text_0": "Hi {{name}}, your course {{course}} starts soon!"
+  "components_push.body_text_0": "{{name}}",
+  "components_push.body_text_1": "{{course}}",
+  "components_push.body_text_2": "Welcome to our academy!"
 }
 ```
 
-It would render this message: "Hi Laura, your course Nursing Assistant Technician starts soon!"
+❌ Invalid examples (not allowed)
 
+The following example is incorrect because it combines plain text with a placeholder in the same field:
+
+```json
+{
+  "components_push.body_text_0": "Hi {{name}}, your course starts soon!"
+}
+```
+The following example is incorrect because it uses two variables in the same field:
+
+```json
+{
+  "components_push.body_text_0": "{{name}} - {{course}}"
+}
+```
 📌Keep in mind:
 
 * The variable name inside `{{ }}` must match the key in the payload (flattened, if needed).
-* You can use as many placeholders as you need, depending on what your template allows.
+* You can use as many placeholders as you need, depending on what your template allows. But remember, you cannot use two variables together in the same field. The system only supports one variable per field. Each message field can contain either a single placeholder or static text, but not a combination of multiple variables.
+* You must choose between a placeholder or a fixed message — combining both is not allowed. 
 * This system allows for personalized messages at scale.
-
-
 
 #### `components_push` Parameter
 
-This parameter allows you to include dynamic content or media in your message template. It is not required by default, but it may be necessary depending on the template you are using.
+This parameter allows you to include dynamic content, static text, or media in your message template. It is not required by default, but it may be necessary depending on the template you are using.
 
 It must follow the following key structure:
 `components_push.{position}_{type}_{number}: "value"`
@@ -355,8 +370,7 @@ Example of sending a media link:
 
 ```json 
 {
-  "components_push.position_type_number": "example",
-  "media_url": "https://example.com/media/image.jpg",
+  "components_push.header_image_1": "https://example.com/image.jpg",
   "contact.number": "34123123123",
   "contact.name": "John Doe",
   "language_template": "en_US",
