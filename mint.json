@@ -58,7 +58,8 @@
               "group": "Settings",
               "pages": [
                 "user-guide/ug_team_en",
-                "user-guide/ug_lcpreferences_en"
+                "user-guide/ug_lcpreferences_en",
+                "user-guide/ug_webwidget_en"
               ]
             }
           ]

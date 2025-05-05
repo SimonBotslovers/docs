@@ -1,0 +1,95 @@
+---
+title: 'Web Widget Configuration'
+description: 'In this section, you will learn how to integrate and configure the Lovi web widget on your site, customizing its appearance and adapting it to your page’s needs to ensure a smooth user experience.'
+---
+
+## Introduction
+
+The web widget is one of the channels provided by *Lovi* to facilitate interaction with your AI Agent. Integrating it into your website is a very simple process: you just need to add the script we provide to your page's code. Once embedded, the widget will automatically appear, allowing users to quickly and easily access the AI Agent without leaving your site. This solution enables real-time support and enhances the user experience, all within the environment of your website.
+
+In this section, we will guide you step by step on how to configure the widget to perfectly fit your needs and preferences. From customizing its appearance to integrating it with your website, we will help you adapt the widget to best align with the aesthetics and functionality of your page, ensuring a smooth user experience that meets your expectations.
+
+## Overview of Your Web Widgets
+
+On the initial configuration screen of the web widget, you will see a list of the widgets linked to your company. If you haven’t created any widgets yet, the list will appear empty. You can create one at any time by clicking the "Add Widget" button. If needed, you can use multiple widgets, whether on different websites or tailored to various needs, and manage them centrally from this interface. This will give you full control over the implementation and customization of each widget, making administration easy and hassle-free.
+
+For each web widget, you will have the following information:
+
+* **Avatar**: the image you’ve chosen to represent your Agent. As we will see later, displaying the avatar in the widget is optional, so you don’t have to show it if you prefer not to.
+
+* **Title**: the name you’ve assigned to your web widget, which will help you easily identify it.
+
+* **AI Agent**: the AI Agent associated with the widget, enabling it to interact with users through your website.
+
+* **Created at**: the date when the web widget was created, which will help you keep track of versions and previous configurations.
+
+Additionally, from this screen, you can perform three actions for each widget in the list:
+
+* **Copy the script**: you can copy the corresponding script to embed it in the code of the website where you want to integrate the widget.
+
+* **Access Widget Web Configuration**: you will have the option to customize the settings of each widget individually, adjusting its appearance and functionalities as needed.
+
+* **Delete the widget**: if you decide you no longer need a widget, you can easily delete it from the same screen.
+
+## Widget Web Configuration
+
+From the web widget settings page, you’ll be able to fully customize it to match your style, needs, and the look and feel of your website.
+
+### Accessing the Script
+
+In addition to the widget list, you can also copy the script directly from this section. If you want to set a default language for the widget, you can add the `language` attribute to the script. For example: `language="en"` for English.
+
+### Configuration
+
+From this section, you can select the AI Agent you want to link to your widget. Note that in *Lovi*, you can create multiple AI Agents with different configurations, allowing you to tailor each one to specific needs or use cases. Additionally, you can select the languages your widget will normally support, ensuring a better experience for users visiting your website in different languages.
+
+### Floating message
+
+The purpose of the floating message is to catch the visitor’s attention and ensure that your AI Agent doesn’t go unnoticed on your website. 
+
+You can choose the image that will appear in the widget’s launcher icon, as well as an engaging message to let users know your AI Agent is there to help—for example: "Hi there! Need some help?".
+This message can be configured in the languages you selected earlier, so it will automatically display in the language set in the user’s browser.
+
+> ⚠️ It's important to include all the languages you want the message to appear in, because if a user's browser is set to a language you haven't configured, the floating message will not be displayed. To do this, make sure to add the desired languages in the previous section.
+
+### Header
+
+Here you can configure your widget’s **header**, which can be customized to suit your preferences and needs. Several layout combinations are available, and you can choose the one that best fits your brand style. When you select an option, the corresponding settings will open, allowing you to define the avatar, title, and brand image. Available combinations include:
+
+* **Avatar + Title**: Displays your AI Agent’s avatar along with its title.
+* **Avatar + Brand Image**: Displays the avatar alongside your brand image.
+* **Title**: Only the AI Agent’s title is shown.
+* **Avatar**: Only the avatar is shown.
+* **Brand Image**: Only your brand image is shown.
+
+### Colors
+
+Choosing the right colors for your web widget is key to ensuring seamless integration with your website and your company’s branding.
+You can customize the color of various parts of the widget, as explained below. The color can be defined using RGB values, hexadecimal code, or HSL format—whichever works best for you.
+
+>❗The configurator also includes an eyedropper tool, allowing you to precisely select the exact color you want. This ensures that your widget perfectly matches your brand color, logo, or website design.
+
+Let’s take a look at the widget sections where you can customize the color:
+
+* **Main Color**: This is the background color of the user's messages within the conversation, as well as other interactive elements, such as the arrow used to send the message. It also affects the color of the widget's floating bubble, in case no image has been selected instead.
+* **Color Text**: This is the color in which the user’s messages will appear within the conversation. ⚠️ Make sure the text color you choose contrasts well with the background color selected as the Main Color, to ensure the user has an optimal visual experience.
+* **Background Color**: This is the background color of the widget. ⚠️ Again, make sure the contrast is appropriate with the text color and the background color of both the agent’s and the user’s messages.
+* **Header Color (Background)**: This is the background color of the widget’s header.
+* **Header Color (Text)**: This is the color of the text in the header. It reflects in the header title (if you’ve chosen that option), but also in other elements such as the reload and minimize widget buttons. ⚠️ Make sure the color is suitable and contrasts well with the header background, even if you’ve chosen other options for the header, such as the brand image.
+
+### Form 
+
+If you need to collect user information before starting the conversation, you can do so by enabling the form feature. You can enable one or more of the following fields, and choose whether each should be required or optional for the user:
+* Name
+* Email
+* Phone
+
+You can also include a link to your privacy policy to inform users about how their data will be handled.
+
+If you enable the form feature but don’t activate any of these fields, a preliminary screen will appear in the widget, asking the user to confirm before starting the chat.
+
+### Data Collection
+
+It's also possible to extract data directly from the user's conversation. To do this, you can define keys that specify the information you need to collect.
+
+For example, if you need to save the user's name and their order number during a conversation, you can define the keys `user_name` and `order_id`. Once the agent detects these values, they will be automatically stored for later use.
