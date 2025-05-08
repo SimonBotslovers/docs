@@ -1,0 +1,59 @@
+---
+title: "Data Structure Documentation"
+description: "Official documentation for extracting raw data from the database"
+---
+
+This document provides a detailed overview of the main data structures available to the company to support proper integration, management, and analysis of information related to conversations and participating agents.
+
+In addition to a description of each table structure, it includes recommendations and warnings concerning the responsible handling of personal data found in the records, emphasizing compliance with current privacy and information security regulations.
+
+We recommend reviewing each field definition and the notes on handling personal data carefully before starting any integration or analysis process to ensure safe and proper usage of the provided database.
+
+> ⚠️ The data presented is raw and unprocessed.
+
+## Tables
+
+### `messages`
+
+This table acts as the central repository for all individual messages generated within a conversation. Below are its fields, purpose, and specific recommendations for managing sensitive data securely.
+
+### `agent_activity`
+
+This table contains relevant information about agents — both human and automated — participating in conversations. It enables associating events and metrics with each agent, helping in:
+
+- Individual activity analysis
+- Calculation of key indicators (e.g., response times, session durations, agent availability)
+- Traceability of actions, even across agent transfers
+
+## Table Descriptions
+
+### `messages`
+
+Stores every message exchanged during conversations with the following structure:
+
+| Field         | Type     | Description                                                                                                                                                                  |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sender_id`   | String   | Unique identifier of the sender to link each message to a specific user or agent.                                                                                            |
+| `sender_type` | String   | Origin of the message: `"user"` for customer messages, `"bot"` or `"system"` for automated replies, `"human"` for human agents.                                              |
+| `id`          | String   | Unique message key, used to detect duplicates.                                                                                                                               |
+| `created_at`  | DateTime | Timestamp of the message, always in UTC to ensure clarity across distributed systems.                                                                                        |
+| `channel`     | String   | Message channel: `"whatsapp"` or `"web"` (widget).                                                                                                                           |
+| `session`     | String   | Conversation identifier grouping several messages into a single dialogue thread.                                                                                             |
+| `direction`   | String   | Message direction: `"inbound"` or `"outbound"`.                                                                                                                              |
+| `type`        | String   | Communicative type: `"inbound"` for received messages, `"outbound"` for sent ones.                                                                                           |
+| `text`        | String   | Full text content of the message. Can include freeform input such as emojis, emails, IDs, etc. <br />**Note:** May be `null` for non-text messages like images or documents. |
+| `language`    | String   | Language code (e.g., `"es"`, `"en"`), extracted from conversation parameters for multilingual analysis. <br />**Note:** May be `null` if undetected.                         |
+
+### `agent_activity`
+
+> ⚠️ No data has been incorporated yet.
+
+This table is planned to store event data linked to both human and virtual agents to support session tracking and individual performance analysis.
+
+## Handling of Personal Data
+
+The materialized view `messages_mv`, particularly the `text` column, retains the full content of customer interactions. This may include personally identifiable information (PII) such as names, email addresses, ID numbers, booking codes, and travel details.
+
+> ⚠️ These records have not been anonymized or pseudonymized to preserve conversation context and ensure analytical accuracy.
+
+It is **essential** to process this data in accordance with applicable regulations, ensuring confidentiality, data security, and respect for the rights of data subjects.

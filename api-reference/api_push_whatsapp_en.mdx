@@ -9,7 +9,7 @@ This section provides the official documentation for using Lovi's API with Whats
 
 ## 📣 Send Notification
 
-To send a notification via the Lovi API, make a POST request to the endpoint with the necessary parameters and authentication. 
+To send a notification via the Lovi API, make a POST request to the endpoint with the necessary parameters and authentication.
 
 > **Method**: POST **Method**: JSON
 
@@ -18,27 +18,27 @@ To send a notification via the Lovi API, make a POST request to the endpoint wit
 ```
 POST https://cloud.lovi.ai/functions/v1/notify
 ```
+
 ### Query Parameters
 
-| Parameter    | Required | Description                                                                 |
-|--------------|----------|-----------------------------------------------------------------------------|
-| `access_key` | Yes      | Your unique API access key.                                                  |
+| Parameter    | Required | Description                                                                                                                                    |
+| ------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `access_key` | Yes      | Your unique API access key.                                                                                                                    |
 | `unflatten`  | No       | If set to `true`, the body must contain flat variables (no nested objects). If set to `false` or omitted, the body can contain nested objects. |
 
-When `unflatten=true`, the body must be flat, meaning no nested objects are allowed. 
+When `unflatten=true`, the body must be flat, meaning no nested objects are allowed.
 
 ### Headers
 
-| Key                  | Value               | Required | Description                                                                                               |
-|----------------------|---------------------|----------|-----------------------------------------------------------------------------------------------------------|
-| apikey               | your-api-key        | Yes      | Your unique API key for authentication.                                                                   |
+| Key    | Value        | Required | Description                             |
+| ------ | ------------ | -------- | --------------------------------------- |
+| apikey | your-api-key | Yes      | Your unique API key for authentication. |
 
-
-The `apikey` header should contain your API key, which is necessary for authentication and access to the API. 
+The `apikey` header should contain your API key, which is necessary for authentication and access to the API.
 
 ### Body Request
 
-The body of the request contains the notification details. 
+The body of the request contains the notification details.
 
 When `unflatten=false` or the parameter is omitted, you can use nested objects, as shown in the following example.
 
@@ -72,7 +72,9 @@ Example with nested objects (not allowed when `unflatten=true`):
   "language_template": "en_US"
 }
 ```
+
 Example with a flat structure (required when `unflatten=true`). Here the keys are concatenated (e.g., contact.number), which is the correct format when `unflatten=true`:
+
 ```json
 {
   "contact.number": "34123123123",
@@ -81,16 +83,9 @@ Example with a flat structure (required when `unflatten=true`). Here the keys ar
 }
 ```
 
-| Parameter                     | Required | Description                                                                                                                                       |
-|-------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| `components_push`              | No       | **Optional**. The `components_push` parameter is not required by default, but it may be necessary depending on the template being used. It must follow the structure `components_push.{position}_{type}_{number}`. For more information, see below. |
-| `contact`                      | Yes      | The `contact` parameter is an object. For more information about its fields, see below.                                                   |
-| `language_template`            | Yes      | Language code for the template (e.g., `es_ES` for Spanish).                                                                                       |
-| `name_template`                | Yes      | Name of the template that will be used for the message (e.g., `your_template`).                                                                   |
-| `recipient_id`                 | Yes      | ID or phone number of the recipient who will receive the notification. Example: `34123123123`.                                                    |
-| `notification_type`            | Yes      | Type of notification. (e.g., `marketing`, `transactional`).                                                                                       |
-| `campaign_name`                | Yes      | Name of the campaign this notification belongs to (e.g., "Webservice Test").                                                                      |
-                                                                   |
+<table style="min-width: 75px">
+<colgroup><col style="min-width: 25px"><col style="min-width: 25px"><col style="min-width: 25px"></colgroup><tbody><tr><th colspan="1" rowspan="1"><p>Parameter</p></th><th colspan="1" rowspan="1"><p>Required</p></th><th colspan="1" rowspan="1"><p>Description</p></th></tr><tr><td colspan="1" rowspan="1"><p><code spellcheck="false">components_push</code></p></td><td colspan="1" rowspan="1"><p>No</p></td><td colspan="1" rowspan="1"><p><strong>Optional</strong>. The <code spellcheck="false">components_push</code> parameter is not required by default, but it may be necessary depending on the template being used. It must follow the structure <code spellcheck="false">components_push.{position}_{type}_{number}</code>. For more information, see below.</p></td></tr><tr><td colspan="1" rowspan="1"><p><code spellcheck="false">contact</code></p></td><td colspan="1" rowspan="1"><p>Yes</p></td><td colspan="1" rowspan="1"><p>The <code spellcheck="false">contact</code> parameter is an object. For more information about its fields, see below.</p></td></tr><tr><td colspan="1" rowspan="1"><p><code spellcheck="false">language_template</code></p></td><td colspan="1" rowspan="1"><p>Yes</p></td><td colspan="1" rowspan="1"><p>Language code for the template (e.g., <code spellcheck="false">es_ES</code> for Spanish).</p></td></tr><tr><td colspan="1" rowspan="1"><p><code spellcheck="false">name_template</code></p></td><td colspan="1" rowspan="1"><p>Yes</p></td><td colspan="1" rowspan="1"><p>Name of the template that will be used for the message (e.g., <code spellcheck="false">your_template</code>).</p></td></tr><tr><td colspan="1" rowspan="1"><p><code spellcheck="false">recipient_id</code></p></td><td colspan="1" rowspan="1"><p>Yes</p></td><td colspan="1" rowspan="1"><p>ID or phone number of the recipient who will receive the notification. Example: <code spellcheck="false">34123123123</code>.</p></td></tr><tr><td colspan="1" rowspan="1"><p><code spellcheck="false">notification_type</code></p></td><td colspan="1" rowspan="1"><p>Yes</p></td><td colspan="1" rowspan="1"><p>Type of notification. (e.g., <code spellcheck="false">marketing</code>, <code spellcheck="false">transactional</code>).</p></td></tr><tr><td colspan="1" rowspan="1"><p><code spellcheck="false">campaign_name</code></p></td><td colspan="1" rowspan="1"><p>Yes</p></td><td colspan="1" rowspan="1"><p>Name of the campaign this notification belongs to (e.g., "Webservice Test").</p></td></tr><tr><td colspan="1" rowspan="1"><p></p></td></tr></tbody>
+</table>
 
 #### 🧩 Dynamic placeholders (`{{variable}}`)
 
@@ -121,6 +116,7 @@ The following example is incorrect because it combines plain text with a placeho
   "components_push.body_text_0": "Hi {{name}}, your course starts soon!"
 }
 ```
+
 The following example is incorrect because it uses two variables in the same field:
 
 ```json
@@ -128,12 +124,13 @@ The following example is incorrect because it uses two variables in the same fie
   "components_push.body_text_0": "{{name}} - {{course}}"
 }
 ```
+
 📌Keep in mind:
 
-* The variable name inside `{{ }}` must match the key in the payload (flattened, if needed).
-* You can use as many placeholders as you need, depending on what your template allows. But remember, you cannot use two variables together in the same field. The system only supports one variable per field. Each message field can contain either a single placeholder or static text, but not a combination of multiple variables.
-* You must choose between a placeholder or a fixed message — combining both is not allowed. 
-* This system allows for personalized messages at scale.
+- The variable name inside `{{ }}` must match the key in the payload (flattened, if needed).
+- You can use as many placeholders as you need, depending on what your template allows. But remember, you cannot use two variables together in the same field. The system only supports one variable per field. Each message field can contain either a single placeholder or static text, but not a combination of multiple variables.
+- You must choose between a placeholder or a fixed message — combining both is not allowed.
+- This system allows for personalized messages at scale.
 
 #### `components_push` Parameter
 
@@ -144,39 +141,36 @@ It must follow the following key structure:
 
 Where:
 
-* `position` (required): Indicates the component's location within the template. Valid values are: `header`, `body`, `footer`, or `button`.
-
-* `type` (required): Describes the type of parameter, such as text, image, document, etc. The exact value depends on the component and how the template was defined.
-
-* `number` (required): An integer that indicates the parameter's position in the template.
-  
-* `value` (required): It must be type string or string, it contains the value of the parameter.
+- `position` (required): Indicates the component's location within the template. Valid values are: `header`, `body`, `footer`, or `button`.
+- `type` (required): Describes the type of parameter, such as text, image, document, etc. The exact value depends on the component and how the template was defined.
+- `number` (required): An integer that indicates the parameter's position in the template.
+- `value` (required): It must be type string or string, it contains the value of the parameter.
 
 The value assigned to this key will be the content to insert into the template (e.g., a text string, an image URL, or the name of an uploaded file).
 
 Possible values by field:
 
-| **Field (`position`)** | **Accepted `type` values**            |
-|------------------------|---------------------------------------|
+| **`Field (position)`** | **`Accepted type values`**           |
+| ---------------------- | ------------------------------------ |
 | `header`               | `text`, `document`, `image`, `video` |
-| `body`                 | `text`                                |
-| `footer`               | `text`                                |
-| `button`               | `url`, `payload`                      |
-
+| `body`                 | `text`                               |
+| `footer`               | `text`                               |
+| `button`               | `url`, `payload`                     |
 
 Example
+
 ```json
 {
   "components_push.body_text_0": "Lorem Ipsum",
   "components_push.header_image_1": "https://example.com/image.jpg"
 }
 ```
+
 In this example:
 
-```body_text_0``` refers to the first dynamic text parameter in the body.
+`body_text_0` refers to the first dynamic text parameter in the body.
 
-```header_image_1``` refers to an image placed in the template’s header.
-
+`header_image_1` refers to an image placed in the template’s header.
 
 #### `contact` Parameter
 
@@ -186,24 +180,23 @@ However, the `contact` object can contain additional optional fields, such as th
 
 ##### Required Fields in the `contact` Object:
 
-*   **`contact.number`** (String): The phone number of the contact. This field is required and should be in international format without the `+` symbol (e.g., `34123123123`).
-    
+- **`contact.number`** (String): The phone number of the contact. This field is required and should be in international format without the `+` symbol (e.g., `34123123123`).
 
 ##### Optional Fields in the `contact` Object:
 
 Here are some examples:
 
-*   **`contact.name`** (String): The name of the contact. 
-*   **`contact.address`** (String): The address of the contact.
-* You can include as much information as needed within the `contact` object, depending on the level of personalization required by the template.
+- **`contact.name`** (String): The name of the contact.
+- **`contact.address`** (String): The address of the contact.
+- You can include as much information as needed within the `contact` object, depending on the level of personalization required by the template.
 
- ⚠️ **Media Attachments**:
+⚠️ **Media Attachments**:
 
- Currently, the API only supports sending links for media (images, documents, and videos). You cannot directly upload media files, but you can include URLs to media hosted externally.
+Currently, the API only supports sending links for media (images, documents, and videos). You cannot directly upload media files, but you can include URLs to media hosted externally.
 
 Example of sending a media link:
 
-```json 
+```json
 {
   "components_push.header_image_1": "https://example.com/image.jpg",
   "contact.number": "34123123123",
@@ -215,6 +208,7 @@ Example of sending a media link:
   "campaign_name": "Webservice Test"
 }
 ```
+
 ### Response
 
 When the request is successful, the response will contain the following message:
@@ -224,6 +218,7 @@ When the request is successful, the response will contain the following message:
   "message": "Registration successful"
 }
 ```
+
 ---
 
 ## 📚 Tips for Development
@@ -234,5 +229,4 @@ When the request is successful, the response will contain the following message:
 - Store and handle tokens securely.
 - **Prior validations**: Validate data before sending it to the API to avoid errors.
 - **Testing**: Test in a development environment before implementing in production.
-- **Permission control**: Limit token generation to users with administrator permissions. 
-
+- **Permission control**: Limit token generation to users with administrator permissions.
