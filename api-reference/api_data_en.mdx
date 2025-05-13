@@ -11,7 +11,7 @@ In addition to describing each table structure, it includes recommendations and 
 
 We suggest carefully reviewing each field definition and the notes on handling personal data before starting any integration or analysis process to ensure the safe and proper use of the provided database.
 
-> ⚠️ The data presented is raw and unprocessed.
+<Warning>The data presented is raw and unprocessed.</Warning>
 
 ## Accessing the Data in ClickHouse via HTTP and BI Tools
 
@@ -31,7 +31,7 @@ curl -u user:'password' 'https://public-clickhouse.botslovers.com/?query=SELECT%
 
 Replace `user` and `password` with your personal credentials.
 
-> Note: The `query` parameter must be URL-encoded.
+<Note>The `query` parameter must be URL-encoded.</Note>
 
 **Response Formats:**
 
@@ -115,8 +115,8 @@ Stores every message exchanged during conversations.
 | `session`     | String   | Conversation identifier grouping multiple messages. |
 | `direction`   | String   | Message direction: `"inbound"` or `"outbound"`. |
 | `type`        | String   | Communicative type: `"inbound"` (received) or `"outbound"` (sent). |
-| `text`        | String   | Full free-text content of the message. May include text, emojis, emails, IDs, etc. <br>**Note:** May be `null` for images or documents. |
-| `language`    | String   | Language code (e.g., `"es"`, `"en"`). <br>**Note:** May be `null` if undetected. |
+| `text`        | String   | Full free-text content of the message. May include text, emojis, emails, IDs, etc. <br/>**Note:** May be `null` for images or documents. |
+| `language`    | String   | Language code (e.g., `"es"`, `"en"`). <br/>**Note:** May be `null` if undetected. |
 
 ### `agent_activity` (Table: `chat_agent_log_<company>`)
 
@@ -153,6 +153,6 @@ Tracks the history of agent status changes over time, such as transitioning from
 
 The materialized view `messages_mv`, especially the `text` column, retains the full content of customer interactions, potentially containing personal data such as names, email addresses, ID numbers, booking codes, or travel details.
 
-> ⚠️ These records have not been anonymized or pseudonymized to preserve the full context of each conversation and ensure analysis accuracy.
+<Warning>These records have not been anonymized or pseudonymized to preserve the full context of each conversation and ensure analysis accuracy.</Warning>
 
 It is **essential** to process this data according to applicable regulations, always maintaining confidentiality, security, and the rights of data subjects.
