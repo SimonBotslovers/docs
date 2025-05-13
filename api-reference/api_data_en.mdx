@@ -3,57 +3,156 @@ title: "Data Structure Documentation"
 description: "Official documentation for extracting raw data from the database"
 ---
 
-This document provides a detailed overview of the main data structures available to the company to support proper integration, management, and analysis of information related to conversations and participating agents.
+# Official documentation for extracting raw data from the database
 
-In addition to a description of each table structure, it includes recommendations and warnings concerning the responsible handling of personal data found in the records, emphasizing compliance with current privacy and information security regulations.
+This document aims to provide access and a description of the main data structures available to the company to facilitate proper integration, management, and analysis of information related to interactions and participating agents.
 
-We recommend reviewing each field definition and the notes on handling personal data carefully before starting any integration or analysis process to ensure safe and proper usage of the provided database.
+In addition to describing each table structure, it includes recommendations and warnings regarding the responsible handling of personal data that may be found in the records, highlighting the importance of complying with current privacy and information security regulations.
+
+We suggest carefully reviewing each field definition and the notes on handling personal data before starting any integration or analysis process to ensure the safe and proper use of the provided database.
 
 > ⚠️ The data presented is raw and unprocessed.
+
+## Accessing the Data in ClickHouse via HTTP and BI Tools
+
+This section explains how to connect to the Botslovers ClickHouse database, either through direct HTTP access (for example using `curl`) or via graphical tools and Business Intelligence tools like DBeaver, Power BI, or Tableau.
+
+### Access via HTTP (example using curl)
+
+You can access the data by executing SQL queries directly against the ClickHouse database via its HTTP interface.
+
+**Basic Example:**
+
+To retrieve the first 10 records from the `messages_<company>` table:
+
+```bash
+curl -u user:'password' 'https://public-clickhouse.botslovers.com/?query=SELECT%20*%20FROM%20messages_your_company%20LIMIT%2010'
+```
+
+Replace `user` and `password` with your personal credentials.
+
+> Note: The `query` parameter must be URL-encoded.
+
+**Response Formats:**
+
+By default, the response is in TabSeparated format. You can request other formats by adding `FORMAT` at the end of the query:
+
+**JSON Example:**
+
+```bash
+curl -u user:'password' "https://public-clickhouse.botslovers.com/?query=SELECT%20*%20FROM%20messages_your_company%20LIMIT%2010%20FORMAT%20JSON"
+```
+
+**CSV Example:**
+
+```bash
+curl -u user:'password' "https://public-clickhouse.botslovers.com/?query=SELECT%20*%20FROM%20messages_your_company%20LIMIT%2010%20FORMAT%20CSV"
+```
+
+### Access from BI Tools or Database Clients (DBeaver, Power BI, Tableau, etc.)
+
+ClickHouse supports JDBC and ODBC connectors, allowing you to use graphical tools to explore and analyze the data.
+
+#### Access via DBeaver
+
+- Open DBeaver and create a new connection.
+- Select ClickHouse as the database type.
+- Choose HTTP as the connection type.
+- Fill in the following fields:
+  - Host: `public-clickhouse.botslovers.com`
+  - Port: `443`
+  - User: your username
+  - Password: your password
+  - SSL: enabled (make sure the box is checked)
+- Test the connection and save.
+
+#### Access from BI Tools (Power BI, Tableau, etc.)
+
+**Power BI**
+
+- Download and install the official ClickHouse ODBC driver.
+- Configure an ODBC DSN pointing to:
+  - Host: `public-clickhouse.botslovers.com`
+  - Port: `443` (or `8443` depending on configuration, check with your administrator)
+  - SSL Mode: enabled
+  - Username/Password: your credentials
+- In Power BI, create a new ODBC data source and select the configured DSN.
+
+**Tableau**
+
+- You can use the ClickHouse ODBC driver as in Power BI.
+- Alternatively, use the native ClickHouse connector.
+
+## Security and Best Practices
+
+- Your credentials are personal and must not be shared.
+- Consult your administrator if you have questions about usage limits or data structure.
+- We recommend avoiding queries that extract large volumes of data to prevent potential service performance issues.
 
 ## Tables
 
 ### `messages`
 
-This table acts as the central repository for all individual messages generated within a conversation. Below are its fields, purpose, and specific recommendations for managing sensitive data securely.
+Acts as the central repository where each individual message generated in a conversation is stored. This document details its fields, purpose, and specific recommendations for managing sensitive data securely.
 
 ### `agent_activity`
 
-This table contains relevant information about agents — both human and automated — participating in conversations. It enables associating events and metrics with each agent, helping in:
-
-- Individual activity analysis
-- Calculation of key indicators (e.g., response times, session durations, agent availability)
-- Traceability of actions, even across agent transfers
+Tables that concentrate relevant information about agents — human or automated — participating in conversations. They facilitate associating events and metrics to each agent for individual activity analysis, key indicator calculations (e.g., response times, session closures, agent availability), and action traceability across conversations, even when transfers occur.
 
 ## Table Descriptions
 
-### `messages`
+### `messages` (Table: `messages_<company>`)
 
-Stores every message exchanged during conversations with the following structure:
+Stores every message exchanged during conversations.
 
-| Field         | Type     | Description                                                                                                                                                                  |
-| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sender_id`   | String   | Unique identifier of the sender to link each message to a specific user or agent.                                                                                            |
-| `sender_type` | String   | Origin of the message: `"user"` for customer messages, `"bot"` or `"system"` for automated replies, `"human"` for human agents.                                              |
-| `id`          | String   | Unique message key, used to detect duplicates.                                                                                                                               |
-| `created_at`  | DateTime | Timestamp of the message, always in UTC to ensure clarity across distributed systems.                                                                                        |
-| `channel`     | String   | Message channel: `"whatsapp"` or `"web"` (widget).                                                                                                                           |
-| `session`     | String   | Conversation identifier grouping several messages into a single dialogue thread.                                                                                             |
-| `direction`   | String   | Message direction: `"inbound"` or `"outbound"`.                                                                                                                              |
-| `type`        | String   | Communicative type: `"inbound"` for received messages, `"outbound"` for sent ones.                                                                                           |
-| `text`        | String   | Full text content of the message. Can include freeform input such as emojis, emails, IDs, etc. <br />**Note:** May be `null` for non-text messages like images or documents. |
-| `language`    | String   | Language code (e.g., `"es"`, `"en"`), extracted from conversation parameters for multilingual analysis. <br />**Note:** May be `null` if undetected.                         |
+| Field         | Type     | Description |
+|---------------|----------|-------------|
+| `sender_id`   | String   | Unique sender identifier linking each message to a specific entity. |
+| `sender_type` | String   | Message origin: `"user"`, `"bot"`, `"system"`, or `"human"`. |
+| `id`          | String   | Unique key of each message, ensuring duplicate detection. |
+| `created_at`  | DateTime | Timestamp in UTC for when the message was generated. |
+| `channel`     | String   | Channel through which the message was sent: `"whatsapp"` or `"web"` (widget). |
+| `session`     | String   | Conversation identifier grouping multiple messages. |
+| `direction`   | String   | Message direction: `"inbound"` or `"outbound"`. |
+| `type`        | String   | Communicative type: `"inbound"` (received) or `"outbound"` (sent). |
+| `text`        | String   | Full free-text content of the message. May include text, emojis, emails, IDs, etc. <br>**Note:** May be `null` for images or documents. |
+| `language`    | String   | Language code (e.g., `"es"`, `"en"`). <br>**Note:** May be `null` if undetected. |
 
-### `agent_activity`
+### `agent_activity` (Table: `chat_agent_log_<company>`)
 
-> ⚠️ No data has been incorporated yet.
+Records events occurring during agents' interaction with chats.
 
-This table is planned to store event data linked to both human and virtual agents to support session tracking and individual performance analysis.
+| Field              | Type                  | Description |
+|--------------------|-----------------------|-------------|
+| `id`               | String                | Unique event identifier. |
+| `chat_id`          | String                | Associated chat identifier. |
+| `agent_id`         | String                | Unique agent identifier involved in the event. |
+| `joined_at`        | DateTime              | UTC timestamp when the agent joined the chat. |
+| `left_at`          | Nullable(DateTime)    | UTC timestamp when the agent left the chat, or `null` if still active. |
+| `event`            | String                | Type of event. Possible values: `bot_assigned`, `agent_timeout`, `user_timeout`, `agent_joined`, `chat_escalated`, `manual_close`, `resolved`, `assigned_to_human`, `transferred`. |
+| `response_rating`  | Nullable(Int16)       | Rating given for the interaction, if any. |
+| `created_at`       | DateTime              | Record creation timestamp. |
+| `updated_at`       | DateTime              | Record last update timestamp. |
+| `deleted_at`       | Nullable(DateTime)    | Logical deletion timestamp, if applicable. |
+
+### `agent_status_logs` (Table: `agent_status_logs_<company>`)
+
+Tracks the history of agent status changes over time, such as transitioning from "online" to "break".
+
+| Field              | Type     | Description |
+|--------------------|----------|-------------|
+| `id`               | String   | Unique status change identifier. |
+| `agent_id`         | String   | Unique agent identifier. |
+| `old_status`       | String   | Previous agent status: `training`, `offline`, `break`, `ending_shift`, `inactive`, `online`. |
+| `new_status`       | String   | New agent status: `training`, `offline`, `break`, `ending_shift`, `inactive`, `online`. |
+| `status_changed_at`| DateTime | UTC timestamp when the status changed. |
+| `duration_seconds` | Nullable(Int64) | Duration in seconds of the previous status, or `null` if not applicable. |
+| `created_at`       | DateTime | Record creation timestamp. |
 
 ## Handling of Personal Data
 
-The materialized view `messages_mv`, particularly the `text` column, retains the full content of customer interactions. This may include personally identifiable information (PII) such as names, email addresses, ID numbers, booking codes, and travel details.
+The materialized view `messages_mv`, especially the `text` column, retains the full content of customer interactions, potentially containing personal data such as names, email addresses, ID numbers, booking codes, or travel details.
 
-> ⚠️ These records have not been anonymized or pseudonymized to preserve conversation context and ensure analytical accuracy.
+> ⚠️ These records have not been anonymized or pseudonymized to preserve the full context of each conversation and ensure analysis accuracy.
 
-It is **essential** to process this data in accordance with applicable regulations, ensuring confidentiality, data security, and respect for the rights of data subjects.
+It is **essential** to process this data according to applicable regulations, always maintaining confidentiality, security, and the rights of data subjects.
