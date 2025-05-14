@@ -11,7 +11,9 @@ In addition to describing each table structure, it includes recommendations and 
 
 We suggest carefully reviewing each field definition and the notes on handling personal data before starting any integration or analysis process to ensure the safe and proper use of the provided database.
 
-<Warning>The data presented is raw and unprocessed.</Warning>
+<Warning>
+  The data presented is raw and unprocessed.
+</Warning>
 
 ## Accessing the Data in ClickHouse via HTTP and BI Tools
 
@@ -26,12 +28,14 @@ You can access the data by executing SQL queries directly against the ClickHouse
 To retrieve the first 10 records from the `messages_<company>` table:
 
 ```bash
-curl -u user:'password' 'https://public-clickhouse.botslovers.com/?query=SELECT%20*%20FROM%20messages_your_company%20LIMIT%2010'
+curl -u user:'password' 'https://public-clickhouse.botslovers.com/?query=SELECT%20*%20FROM%20messages_company%20LIMIT%2010'
 ```
 
 Replace `user` and `password` with your personal credentials.
 
-<Note>The `query` parameter must be URL-encoded.</Note>
+<Note>
+  The `query` parameter must be URL-encoded.
+</Note>
 
 **Response Formats:**
 
@@ -40,13 +44,13 @@ By default, the response is in TabSeparated format. You can request other format
 **JSON Example:**
 
 ```bash
-curl -u user:'password' "https://public-clickhouse.botslovers.com/?query=SELECT%20*%20FROM%20messages_your_company%20LIMIT%2010%20FORMAT%20JSON"
+curl -u user:'password' "https://public-clickhouse.botslovers.com/?query=SELECT%20*%20FROM%20messages_company%20LIMIT%2010%20FORMAT%20JSON"
 ```
 
 **CSV Example:**
 
 ```bash
-curl -u user:'password' "https://public-clickhouse.botslovers.com/?query=SELECT%20*%20FROM%20messages_your_company%20LIMIT%2010%20FORMAT%20CSV"
+curl -u user:'password' "https://public-clickhouse.botslovers.com/?query=SELECT%20*%20FROM%20messages_company%20LIMIT%2010%20FORMAT%20CSV"
 ```
 
 ### Access from BI Tools or Database Clients (DBeaver, Power BI, Tableau, etc.)
@@ -105,54 +109,56 @@ Tables that concentrate relevant information about agents — human or automated
 
 Stores every message exchanged during conversations.
 
-| Field         | Type     | Description |
-|---------------|----------|-------------|
-| `sender_id`   | String   | Unique sender identifier linking each message to a specific entity. |
-| `sender_type` | String   | Message origin: `"user"`, `"bot"`, `"system"`, or `"human"`. |
-| `id`          | String   | Unique key of each message, ensuring duplicate detection. |
-| `created_at`  | DateTime | Timestamp in UTC for when the message was generated. |
-| `channel`     | String   | Channel through which the message was sent: `"whatsapp"` or `"web"` (widget). |
-| `session`     | String   | Conversation identifier grouping multiple messages. |
-| `direction`   | String   | Message direction: `"inbound"` or `"outbound"`. |
-| `type`        | String   | Communicative type: `"inbound"` (received) or `"outbound"` (sent). |
-| `text`        | String   | Full free-text content of the message. May include text, emojis, emails, IDs, etc. <br/>**Note:** May be `null` for images or documents. |
-| `language`    | String   | Language code (e.g., `"es"`, `"en"`). <br/>**Note:** May be `null` if undetected. |
+| Field         | Type     | Description                                                                                                                               |
+| ------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `sender_id`   | String   | Unique sender identifier linking each message to a specific entity.                                                                       |
+| `sender_type` | String   | Message origin: `"user"`, `"bot"`, `"system"`, or `"human"`.                                                                              |
+| `id`          | String   | Unique key of each message, ensuring duplicate detection.                                                                                 |
+| `created_at`  | DateTime | Timestamp in UTC for when the message was generated.                                                                                      |
+| `channel`     | String   | Channel through which the message was sent: `"whatsapp"` or `"web"` (widget).                                                             |
+| `session`     | String   | Conversation identifier grouping multiple messages.                                                                                       |
+| `direction`   | String   | Message direction: `"inbound"` or `"outbound"`.                                                                                           |
+| `type`        | String   | Communicative type: `"inbound"` (received) or `"outbound"` (sent).                                                                        |
+| `text`        | String   | Full free-text content of the message. May include text, emojis, emails, IDs, etc. <br />**Note:** May be `null` for images or documents. |
+| `language`    | String   | Language code (e.g., `"es"`, `"en"`). <br />**Note:** May be `null` if undetected.                                                        |
 
 ### `agent_activity` (Table: `chat_agent_log_<company>`)
 
 Records events occurring during agents' interaction with chats.
 
-| Field              | Type                  | Description |
-|--------------------|-----------------------|-------------|
-| `id`               | String                | Unique event identifier. |
-| `chat_id`          | String                | Associated chat identifier. |
-| `agent_id`         | String                | Unique agent identifier involved in the event. |
-| `joined_at`        | DateTime              | UTC timestamp when the agent joined the chat. |
-| `left_at`          | Nullable(DateTime)    | UTC timestamp when the agent left the chat, or `null` if still active. |
-| `event`            | String                | Type of event. Possible values: `bot_assigned`, `agent_timeout`, `user_timeout`, `agent_joined`, `chat_escalated`, `manual_close`, `resolved`, `assigned_to_human`, `transferred`. |
-| `response_rating`  | Nullable(Int16)       | Rating given for the interaction, if any. |
-| `created_at`       | DateTime              | Record creation timestamp. |
-| `updated_at`       | DateTime              | Record last update timestamp. |
-| `deleted_at`       | Nullable(DateTime)    | Logical deletion timestamp, if applicable. |
+| Field             | Type               | Description                                                                                                                                                                        |
+| ----------------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`              | String             | Unique event identifier.                                                                                                                                                           |
+| `chat_id`         | String             | Associated chat identifier.                                                                                                                                                        |
+| `agent_id`        | String             | Unique agent identifier involved in the event.                                                                                                                                     |
+| `joined_at`       | DateTime           | UTC timestamp when the agent joined the chat.                                                                                                                                      |
+| `left_at`         | Nullable(DateTime) | UTC timestamp when the agent left the chat, or `null` if still active.                                                                                                             |
+| `event`           | String             | Type of event. Possible values: `bot_assigned`, `agent_timeout`, `user_timeout`, `agent_joined`, `chat_escalated`, `manual_close`, `resolved`, `assigned_to_human`, `transferred`. |
+| `response_rating` | Nullable(Int16)    | Rating given for the interaction, if any.                                                                                                                                          |
+| `created_at`      | DateTime           | Record creation timestamp.                                                                                                                                                         |
+| `updated_at`      | DateTime           | Record last update timestamp.                                                                                                                                                      |
+| `deleted_at`      | Nullable(DateTime) | Logical deletion timestamp, if applicable.                                                                                                                                         |
 
 ### `agent_status_logs` (Table: `agent_status_logs_<company>`)
 
 Tracks the history of agent status changes over time, such as transitioning from "online" to "break".
 
-| Field              | Type     | Description |
-|--------------------|----------|-------------|
-| `id`               | String   | Unique status change identifier. |
-| `agent_id`         | String   | Unique agent identifier. |
-| `old_status`       | String   | Previous agent status: `training`, `offline`, `break`, `ending_shift`, `inactive`, `online`. |
-| `new_status`       | String   | New agent status: `training`, `offline`, `break`, `ending_shift`, `inactive`, `online`. |
-| `status_changed_at`| DateTime | UTC timestamp when the status changed. |
-| `duration_seconds` | Nullable(Int64) | Duration in seconds of the previous status, or `null` if not applicable. |
-| `created_at`       | DateTime | Record creation timestamp. |
+| Field               | Type            | Description                                                                                  |
+| ------------------- | --------------- | -------------------------------------------------------------------------------------------- |
+| `id`                | String          | Unique status change identifier.                                                             |
+| `agent_id`          | String          | Unique agent identifier.                                                                     |
+| `old_status`        | String          | Previous agent status: `training`, `offline`, `break`, `ending_shift`, `inactive`, `online`. |
+| `new_status`        | String          | New agent status: `training`, `offline`, `break`, `ending_shift`, `inactive`, `online`.      |
+| `status_changed_at` | DateTime        | UTC timestamp when the status changed.                                                       |
+| `duration_seconds`  | Nullable(Int64) | Duration in seconds of the previous status, or `null` if not applicable.                     |
+| `created_at`        | DateTime        | Record creation timestamp.                                                                   |
 
 ## Handling of Personal Data
 
-The materialized view `messages_mv`, especially the `text` column, retains the full content of customer interactions, potentially containing personal data such as names, email addresses, ID numbers, booking codes, or travel details.
+The `messages_`table, especially the `text` column, retains the full content of customer interactions, potentially containing personal data such as names, email addresses, ID numbers, or other details about the products or services offered by your company.
 
-<Warning>These records have not been anonymized or pseudonymized to preserve the full context of each conversation and ensure analysis accuracy.</Warning>
+<Warning>
+  These records have not been anonymized or pseudonymized to preserve the full context of each conversation and ensure analysis accuracy.
+</Warning>
 
 It is **essential** to process this data according to applicable regulations, always maintaining confidentiality, security, and the rights of data subjects.
