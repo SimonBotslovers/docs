@@ -86,9 +86,27 @@ If you enable the form feature but don’t activate any of these fields, a preli
 
 ### Data Collection
 
-It's also possible to extract data directly from the user's conversation. To do this, you can define keys that specify the information you need to collect.
+With this option enabled, the widget can collect and store user information in two ways: by extracting it from the ongoing conversation or by reading it directly from the client environment.
 
-For example, if you need to save the user's name and their order number during a conversation, you can define the keys `user_name` and `order_id`. Once the agent detects these values, they will be automatically stored for later use.
+You can define custom keys (e.g., `user_name`, `order_id`) that the agent will track during the conversation. Once a value matching one of these keys is detected, it is automatically stored and made available throughout the session. This allows for more contextual and personalized interactions without requiring repeated input from the user.
+
+#### Detecting Logged-In Users from Client-Side Storage
+
+The widget can be configured to detect if a user is already logged in by checking for a specific variable stored in the browser’s `localStorage` or cache — such as a `user_token`, `session_id`, or `client-email`.
+
+If the variable is present, the widget will automatically use it to adapt its behavior — for example, skipping login prompts.
+
+To enable this:
+
+* Add a **new key**.
+
+* In the **Storage key** field, enter the name of the variable as it appears in the client’s environment (e.g., `client-email`).
+
+In the Type dropdown, select **User information**.
+
+Once configured, the widget will check for the value of this key when it loads and use it to prefill user data or trigger conditional flows as needed.
+
+It is the integrator’s responsibility to ensure that the correct variable name is used and that the value is reliably available in the browser at the time of widget initialization.
 
 ### Extra Widget Functionalities
 
@@ -105,9 +123,13 @@ This option is ideal when you want the virtual assistant to be part of the main 
 
 **Important**: Make sure the specified container exists in the DOM when the widget loads, otherwise it will not display correctly.
 
-### Translations and texts (English)
+### Translations and Texts (English)
 
-This section allows you to customize the English text that will appear in the various fields of the widget interface:
+This section allows you to customize the text that will appear in various fields of the widget interface according to the widget’s language settings.
+
+Depending on the configured languages, you can provide translations for all supported languages to ensure a consistent user experience across locales.
+
+The customizable fields include:
 
 - `floating_message`
 - `write_message`
@@ -118,6 +140,8 @@ This section allows you to customize the English text that will appear in the va
 - `enter_name`
 - `enter_phone`
 - `start_chat`
+
+By setting these texts per language, the widget will display the appropriate version based on the user’s selected or detected language.
 
 ### Extra CSS
 
