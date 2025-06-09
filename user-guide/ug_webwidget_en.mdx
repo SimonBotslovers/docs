@@ -86,9 +86,9 @@ If you enable the form feature but don’t activate any of these fields, a preli
 
 ### Data Collection
 
-With this option enabled, the widget can collect and store user information in two ways: by extracting it from the ongoing conversation or by reading it directly from the client environment.
+With this option enabled, the widget can collect and store user information by reading it directly from the client environment.
 
-You can define custom keys (e.g., `user_name`, `order_id`) that the agent will track during the conversation. Once a value matching one of these keys is detected, it is automatically stored and made available throughout the session. This allows for more contextual and personalized interactions without requiring repeated input from the user.
+You can define custom keys (e.g., user_name, order_id) that the widget will track during the conversation. Once the widget detects a value matching one of these keys or matching a variable from the environment where the widget is installed, that value is automatically stored and injected into the conversation context. This ensures the information is available throughout the session, enabling more contextual and personalized interactions without requiring the user to repeat the same input.
 
 #### Detecting Logged-In Users from Client-Side Storage
 
@@ -107,6 +107,7 @@ In the Type dropdown, select **User information**.
 Once configured, the widget will check for the value of this key when it loads and use it to prefill user data or trigger conditional flows as needed.
 
 It is the integrator’s responsibility to ensure that the correct variable name is used and that the value is reliably available in the browser at the time of widget initialization.
+
 
 ### Extra Widget Functionalities
 
